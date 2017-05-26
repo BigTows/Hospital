@@ -6,7 +6,8 @@
  * Time: 23:32
  * Here Settings Project
  */
-
+$root = $_SERVER['DOCUMENT_ROOT']."/hospital/server/";
+require_once $root."application/class/DataBase.php";
 /**
  * The data from the database
  */
@@ -18,4 +19,6 @@ $locationAddress = "localhost"; //Location Address
 /**
  *
  */
-$dns = "";
+$dns = $driver.":dbname=".$nameDataBase.";host=".$locationAddress;
+
+$DBConnect = new DataBase($dns,$userDataBase,$passwordDataBase);
