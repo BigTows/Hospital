@@ -17,5 +17,5 @@ class Doctor extends User {
     {
         parent::__construct($sessionID);
     }
-    
+
 }
