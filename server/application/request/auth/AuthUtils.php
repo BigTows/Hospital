@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Created by PhpStorm.
+ * File: Auth.php.
+ * Created: bigtows.
+ * Created date: 29/05/2017  20:11
+ * Description:
+ */
+$root = $_SERVER['DOCUMENT_ROOT']."/hospital/server/";
+require_once $root."application/config/config.php";
+class AuthUtils{
+    public static function isGoodInputParameters($typeUser,$userName=null,$password=null):bool {
+        if ($userName ?? true || $password ?? true) return false;
+        global $DBConnect;
+        $sqlQuery ="SELECT COUNT(*) as countUsers FROM ";
+        if ($typeUser==Constant::DOCTOR_TYPE) {
+            $sqlQuery=$sqlQuery.Constant::DOCTOR_TABLE." WHERE login = :id AND password=:password";
+        }else{
+            $sqlQuery=$sqlQuery.Constant::USER_TABLE." WHERE id_user = :id AND password=:password";
+        }
+       $stmt = $DBConnect->sendQuery($sqlQuery,[
+           "id"=>$userName,
+           "password"=>$password
+       ]);
+       return  !$DBConnect->hasError() && $stmt->fetch()['countUsers'];
+    }
+}

@@ -1,4 +1,7 @@
-##Каталог с Серверной частью
+# Каталог с Серверной частью
+
+
+#№ Структура Базы данных
 
 ```sql
 
@@ -37,6 +40,7 @@ CREATE TABLE `doctor` (
 CREATE TABLE `history_user` (
   `id_history` int(11) NOT NULL,
   `id_user` varchar(16) NOT NULL,
+  `id_doctor` int(11) NOT NULL,
   `text` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -99,7 +103,8 @@ ALTER TABLE `doctor`
 --
 ALTER TABLE `history_user`
   ADD PRIMARY KEY (`id_history`),
-  ADD KEY `id_user` (`id_user`);
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_doctor` (`id_doctor`);
 
 --
 -- Индексы таблицы `post`
@@ -159,7 +164,8 @@ ALTER TABLE `doctor`
 -- Ограничения внешнего ключа таблицы `history_user`
 --
 ALTER TABLE `history_user`
-  ADD CONSTRAINT `history_user_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `history_user_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `history_user_ibfk_2` FOREIGN KEY (`id_doctor`) REFERENCES `doctor` (`id_doctor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `record`
@@ -167,6 +173,5 @@ ALTER TABLE `history_user`
 ALTER TABLE `record`
   ADD CONSTRAINT `record_ibfk_1` FOREIGN KEY (`id_doctor`) REFERENCES `doctor` (`id_doctor`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `record_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
 ```
