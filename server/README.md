@@ -2,6 +2,8 @@
 
 
 ## API
+### URL 
+* hospital/server/application/request/index.php
 ### Метод auth (POST)
  Параметры | Значения
 ----------------|----------------------
