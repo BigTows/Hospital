@@ -9,8 +9,18 @@
  */
 $root = $_SERVER['DOCUMENT_ROOT']."/hospital/server/";
 require_once $root."application/config/config.php";
+
+/**
+ * Class AuthUtils
+ */
 class AuthUtils{
-    public static function isGoodInputParameters($typeUser,$userName=null,$password=null):bool {
+    /**
+     * @param $typeUser
+     * @param null $userName
+     * @param null $password
+     * @return bool
+     */
+    public static function isGoodInputParameters($typeUser, $userName=null, $password=null):bool {
         if ($userName ?? true || $password ?? true) return false;
         global $DBConnect;
         $sqlQuery ="SELECT COUNT(*) as countUsers FROM ";

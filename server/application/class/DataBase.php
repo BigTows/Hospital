@@ -92,6 +92,6 @@ class DataBase
      */
     private function log($message)
     {
-        if (DEBUG_MODE && $this->debug) echo "Class DataBase -> " . $message;
+        if (false && $this->debug) echo "Class DataBase -> " . $message;
     }
 }

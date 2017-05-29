@@ -12,12 +12,12 @@ class Constant
     /**
      * Types
      */
-    public static const USER_TYPE = 1;
-    public static const DOCTOR_TYPE = 2;
+    const USER_TYPE = 1;
+    const DOCTOR_TYPE = 2;
     /**
      * DataBase
      */
-    public static const DATABASE_NAME = "Hospital";
-    public static const DOCTOR_TABLE = "doctor";
-    public static const USER_TABLE = "user";
+      const DATABASE_NAME = "Hospital";
+      const DOCTOR_TABLE = "doctor";
+      const USER_TABLE = "user";
 }
