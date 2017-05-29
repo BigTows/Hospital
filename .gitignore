@@ -4,5 +4,3 @@
 doc/\.DS_Store
 
 \.DS_Store
-
-server/application/config/config\.php

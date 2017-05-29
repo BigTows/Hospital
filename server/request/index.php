@@ -18,23 +18,7 @@ require_once $requestFolder . "auth/AuthUtils.php";
 /**
  * @api {post}
  */
-if (isset($_POST['auth'])) {
-    $userName = $_POST['name'] ?? null;
-    $password = $_POST['password'] ?? null;
-    $typeUser = $_POST['type_user'] ?? 1;
-    if (AuthUtils::isGoodInputParameters($typeUser, $userName, $password)) {
-        if (AuthUtils::authUser($typeUser, $userName)) {
-            $response = new Response("Success", "You is auth", ["token" => session_id()], 0);
-        } else {
-            $response = new Response("Bad input data", "", [
-            ], 2);
-        }
-    } else {
-        $response = new Response("Bad input data", "", [
-        ], 2);
-    }
-
-} else if (isset($_POST['getDoctors'])) {
+if (isset($_POST['getDoctors'])) {
     $response = new Response("");
 } else {
     $response = new Response("Method not founded", "", [], 1);

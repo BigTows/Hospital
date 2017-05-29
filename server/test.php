@@ -10,10 +10,9 @@
 <div id="resp"></div>
 <script>
     var xhr = new XMLHttpRequest();
-    xhr.open("POST","application/request/index.php");
+    xhr.open("POST","request/auth/");
     var data = new FormData();
-    data.append("auth","");
-    data.append("name","doctor2_1");
+    data.append("name","doctor_1");
     data.append("password","test");
     data.append("type_user","2");
     xhr.onreadystatechange = function () {
