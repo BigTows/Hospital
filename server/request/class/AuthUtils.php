@@ -37,7 +37,12 @@ class AuthUtils{
        return  !$DBConnect->hasError() && $stmt->fetch()['countUsers'];
     }
 
-    public static function isAuth($token,$typeUser=1):int{
+    /**
+     * @param $token
+     * @param int $typeUser
+     * @return int
+     */
+    public static function isAuth($token, $typeUser=1):int{
         global $DBConnect;
         if ($typeUser==Constant::DOCTOR_TYPE){
             $sqlQuery = "SELECT id_doctor as ID FROM ".Constant::SESSION_DOCTOR_TABLE." WHERE token=:token";
