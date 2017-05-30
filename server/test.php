@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**
  * Created by PhpStorm.
  * File: test.php.
@@ -10,10 +11,9 @@
 <div id="resp"></div>
 <script>
     var xhr = new XMLHttpRequest();
-    xhr.open("POST","request/auth/");
+    xhr.open("POST","request/getProfile/");
     var data = new FormData();
-    data.append("name","doctor_1");
-    data.append("password","test");
+    data.append("token","e2euqsurg23nr5smgl1f4tpl144");
     data.append("type_user","2");
     xhr.onreadystatechange = function () {
         if (this.status===200 && this.readyState===4)

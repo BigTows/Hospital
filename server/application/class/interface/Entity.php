@@ -15,9 +15,9 @@ interface Entity
 {
     /**
      * Entity constructor.
-     * @param $sessionID
+     * @param $token
      */
-    public function __construct($sessionID);
+    public function __construct($token);
 
     /**
      * @return bool

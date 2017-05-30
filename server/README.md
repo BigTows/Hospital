@@ -17,6 +17,20 @@ type_user | Тип пользователя, варианты: 1 (Пациент
 0     | {"level":0,"messages":{"short":"Success","full":"You is auth"},"data":{"token":"umeose37j8lodm8uvrvrqjl192"}}
 2 | {"level":2,"messages":{"short":"Bad input data","full":""},"data":[]}
 
+### Метод getProfile (POST)
+ Параметры | Значения
+----------------|----------------------
+token     | Token - полученый после авторизации (auth метод)
+type_user     | Тип пользователя, варианты: 1 (Пациент) или 2 (Доктор) по умолчанию пациент
+
+#### Примеры возврата
+ Код | JSON - config
+----------------|----------------------
+0     | {"level":0,"messages":{"short":"Success","full":"Send data"},"data":[{"first_name":"Александр","second_name":"Чапчук","middle_name":"Юрьевич","sex":"1","phone":"","date":"1998-07-25","email":""}]}
+2 | {"level":2,"messages":{"short":"You are not authorized","full":"Please use method %auth%"},"data":[]}
+
+
+
 ## Структура Базы данных
 
 ```sql

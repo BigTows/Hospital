@@ -9,15 +9,15 @@
  */
 class User implements Entity
 {
-    private $sessionID;
+    private $token;
 
     /**
      * User constructor.
-     * @param $sessionID
+     * @param $token
      */
-    public function __construct($sessionID)
+    public function __construct($token)
     {
-        $this->sessionID=$sessionID;
+        $this->token=$token;
     }
 
     /**

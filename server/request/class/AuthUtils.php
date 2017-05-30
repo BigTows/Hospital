@@ -37,6 +37,20 @@ class AuthUtils{
        return  !$DBConnect->hasError() && $stmt->fetch()['countUsers'];
     }
 
+    public static function isAuth($token,$typeUser=1):int{
+        global $DBConnect;
+        if ($typeUser==Constant::DOCTOR_TYPE){
+            $sqlQuery = "SELECT id_doctor as ID FROM session_auth_doctor WHERE token=:token";
+        }else{
+            $sqlQuery = "SELECT id_user as ID FROM session_auth_user WHERE token=:token";
+        }
+        $stmt = $DBConnect->sendQuery($sqlQuery,[
+            "token"=>$token
+        ]);
+        $id = $stmt->fetch()['ID'];
+        return $id ? intval($id) : -1;
+    }
+
     /**
      * @param $typeUser
      * @param $userName
@@ -53,7 +67,7 @@ class AuthUtils{
             $sqlQuery = "INSERT INTO session_auth_user VALUES (:id,:token) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
         }
 
-        $st = $DBConnect->sendQuery($sqlQuery,[
+        $DBConnect->sendQuery($sqlQuery,[
             "id"=>$userName,
             "token"=>session_id()
         ]);
@@ -66,7 +80,7 @@ class AuthUtils{
      * @param $userName
      * @return int
      */
-    private static function getIDUser($typeUser, $userName):int{
+    public static function getIDUser($typeUser, $userName):int{
         if (!self::checkInputData($typeUser,$userName)) return -1;
         global $DBConnect;
         if ($typeUser==Constant::DOCTOR_TYPE) {
