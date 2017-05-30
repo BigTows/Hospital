@@ -20,4 +20,6 @@ class Constant
       const DATABASE_NAME = "Hospital";
       const DOCTOR_TABLE = "doctor";
       const USER_TABLE = "user";
+      const SESSION_DOCTOR_TABLE = "session_auth_doctor";
+      const SESSION_USER_TABLE = "session_auth_user";
 }

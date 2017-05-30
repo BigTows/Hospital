@@ -18,7 +18,7 @@ if ($idUser!=-1) {
         $sqlQuery  = "SELECT first_name,second_name,middle_name,sex,phone,date,email FROM ".Constant::USER_TABLE." WHERE id_user=:id";
     }
     $stmt = $DBConnect->sendQuery($sqlQuery,["id"=>$idUser]);
-    $response = new Response("Success","Send data",$stmt->fetchAll(PDO::FETCH_OBJ),0);
+    $response = new Response("Success","Send data",$stmt->fetch(PDO::FETCH_OBJ),0);
 } else {
     $response = new Response("You are not authorized", "Please use method %auth%", [], 2);
 }

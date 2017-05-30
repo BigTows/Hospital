@@ -13,7 +13,7 @@ session_start();
     var xhr = new XMLHttpRequest();
     xhr.open("POST","request/getProfile/");
     var data = new FormData();
-    data.append("token","e2euqsurg23nr5smgl1f4tpl144");
+    data.append("token","eeuqsurg23nr5smgl1f4tpl144");
     data.append("type_user","2");
     xhr.onreadystatechange = function () {
         if (this.status===200 && this.readyState===4)

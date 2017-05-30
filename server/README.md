@@ -26,7 +26,7 @@ type_user     | Тип пользователя, варианты: 1 (Пацие
 #### Примеры возврата
  Код | JSON - config
 ----------------|----------------------
-0     | {"level":0,"messages":{"short":"Success","full":"Send data"},"data":[{"first_name":"Александр","second_name":"Чапчук","middle_name":"Юрьевич","sex":"1","phone":"","date":"1998-07-25","email":""}]}
+0     | {"level":0,"messages":{"short":"Success","full":"Send data"},"data":{"first_name":"Александр","second_name":"Чапчук","middle_name":"Юрьевич","sex":"1","phone":"","date":"1998-07-25","email":""}}
 2 | {"level":2,"messages":{"short":"You are not authorized","full":"Please use method %auth%"},"data":[]}
 
 

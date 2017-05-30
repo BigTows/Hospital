@@ -40,9 +40,9 @@ class AuthUtils{
     public static function isAuth($token,$typeUser=1):int{
         global $DBConnect;
         if ($typeUser==Constant::DOCTOR_TYPE){
-            $sqlQuery = "SELECT id_doctor as ID FROM session_auth_doctor WHERE token=:token";
+            $sqlQuery = "SELECT id_doctor as ID FROM ".Constant::SESSION_DOCTOR_TABLE." WHERE token=:token";
         }else{
-            $sqlQuery = "SELECT id_user as ID FROM session_auth_user WHERE token=:token";
+            $sqlQuery = "SELECT id_user as ID FROM ".Constant::SESSION_USER_TABLE." WHERE token=:token";
         }
         $stmt = $DBConnect->sendQuery($sqlQuery,[
             "token"=>$token
@@ -62,9 +62,9 @@ class AuthUtils{
         if ($typeUser==Constant::DOCTOR_TYPE) {
             $userName = self::getIDUser($typeUser,$userName);
             if ($userName==-1) return false;
-            $sqlQuery = "INSERT INTO session_auth_doctor VALUES (:id,:token,CURRENT_TIMESTAMP()) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
+            $sqlQuery = "INSERT INTO ".Constant::SESSION_DOCTOR_TABLE." VALUES (:id,:token,CURRENT_TIMESTAMP()) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
         }else{
-            $sqlQuery = "INSERT INTO session_auth_user VALUES (:id,:token) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
+            $sqlQuery = "INSERT INTO ".Constant::SESSION_USER_TABLE." VALUES (:id,:token) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
         }
 
         $DBConnect->sendQuery($sqlQuery,[
