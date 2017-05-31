@@ -69,7 +69,7 @@ class AuthUtils{
             if ($userName==-1) return false;
             $sqlQuery = "INSERT INTO ".Constant::SESSION_DOCTOR_TABLE." VALUES (:id,:token,CURRENT_TIMESTAMP()) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
         }else{
-            $sqlQuery = "INSERT INTO ".Constant::SESSION_USER_TABLE." VALUES (:id,:token) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
+            $sqlQuery = "INSERT INTO ".Constant::SESSION_USER_TABLE." VALUES (:id,:token,CURRENT_TIMESTAMP()) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
         }
 
         $DBConnect->sendQuery($sqlQuery,[
@@ -99,6 +99,16 @@ class AuthUtils{
         $id = $stmt->fetch()['idU'];
         return $id ? intval($id) : -1;
 
+    }
+
+    public static function getProfile($userID,$typeUser=1) {
+        global $DBConnect;
+        if ($typeUser==Constant::DOCTOR_TYPE){
+            $sqlQuery  = "SELECT first_name,second_name,middle_name,sex,phone,date,email FROM ".Constant::DOCTOR_TABLE." WHERE id_doctor=:id";
+        }else{
+            $sqlQuery  = "SELECT first_name,second_name,middle_name,sex,phone,date,email FROM ".Constant::USER_TABLE." WHERE id_user=:id";
+        }
+        return $DBConnect->sendQuery($sqlQuery,["id"=>$userID])->fetch(PDO::FETCH_OBJ);
     }
 
     /**

@@ -1,9 +1,6 @@
 {capture name=content}
-    <div class="row">
-        <div class="col s1"></div>
         <div class="col s10 card-panel">
-
+            <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Drop Me!</a>
         </div>
-    </div>
 {/capture}
 {include 'util/body.tpl'}

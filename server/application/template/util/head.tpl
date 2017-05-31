@@ -5,4 +5,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="media/JavaScript/materialize.min.js"></script>
-<title>Title</title>
+
+<title>Поликлиника</title>

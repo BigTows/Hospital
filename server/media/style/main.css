@@ -10,3 +10,9 @@ body {
 main {
     flex: 1 0 auto;
 }
+#toast-container {
+    top: auto !important;
+    left: auto !important;
+    bottom: 10%;
+    right:7%;
+}
