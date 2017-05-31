@@ -111,6 +111,16 @@ class AuthUtils{
         return $DBConnect->sendQuery($sqlQuery,["id"=>$userID])->fetch(PDO::FETCH_OBJ);
     }
 
+    public static function logout($token,$typeUser=1){
+        global $DBConnect;
+        if ($typeUser==Constant::DOCTOR_TYPE){
+            $sqlQuery  = "DELETE FROM ".Constant::SESSION_DOCTOR_TABLE." WHERE token=:token";
+        }else{
+            $sqlQuery  = "DELETE FROM ".Constant::SESSION_USER_TABLE." WHERE token=:token";
+        }
+        $DBConnect->sendQuery($sqlQuery,["token"=>$token]);
+    }
+
     /**
      * @param array ...$data
      * @return bool

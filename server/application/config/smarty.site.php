@@ -10,7 +10,9 @@ $data = [
 ];
 
 $pages = [
-  "main"=>"index.tpl"
+  "main"=>"index.tpl",
+    "profile"=>"profile.tpl",
+    "exit"=>"exit.tpl"
 ];
 
 function getPage($template){
@@ -19,7 +21,7 @@ function getPage($template){
     global $data;
     //Check for undefined Template
     $template = $template['tmp'] ?? "main";
-
+    actionOnPage($template);
     //Get template name
     $template = $pages[$template] ?? $pages["main"];
     $userID = AuthUtils::isAuth(session_id());
@@ -28,4 +30,13 @@ function getPage($template){
     }
     $smarty->assign("data",$data);
     return $template;
+}
+
+function actionOnPage($page){
+    switch ($page){
+        case "exit":{
+            AuthUtils::logout(session_id());
+            break;
+        }
+    }
 }

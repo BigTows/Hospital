@@ -49,7 +49,7 @@
                         <li class="collection-header">Здравствуйте, {$data.profile.second_name} {$data.profile.first_name|truncate:2:"."}{$data.profile.middle_name|truncate:2:"."}</li>
                         <li class="collection-item">
                             <div>Профиль
-                                <a href="#!" class="secondary-content">
+                                <a href="profile" class="secondary-content">
                                     <i class="material-icons">perm_identity</i>
                                 </a>
                             </div>
@@ -70,7 +70,7 @@
                         </li>
                         <li class="collection-item">
                             <div>Выйти
-                                <a href="#!" class="secondary-content">
+                                <a href="exit" class="secondary-content">
                                     <i class="material-icons">settings_power</i>
                                 </a>
                             </div>
