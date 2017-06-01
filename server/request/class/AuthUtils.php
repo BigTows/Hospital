@@ -104,9 +104,9 @@ class AuthUtils{
     public static function getProfile($userID,$typeUser=1) {
         global $DBConnect;
         if ($typeUser==Constant::DOCTOR_TYPE){
-            $sqlQuery  = "SELECT first_name,second_name,middle_name,sex,phone,date,email FROM ".Constant::DOCTOR_TABLE." WHERE id_doctor=:id";
+            $sqlQuery  = "SELECT first_name,second_name,middle_name,sex,phone,date,email,photo FROM ".Constant::DOCTOR_TABLE." WHERE id_doctor=:id";
         }else{
-            $sqlQuery  = "SELECT first_name,second_name,middle_name,sex,phone,date,email FROM ".Constant::USER_TABLE." WHERE id_user=:id";
+            $sqlQuery  = "SELECT id_user as polis,first_name,second_name,middle_name,sex,phone,date,email,photo FROM ".Constant::USER_TABLE." WHERE id_user=:id";
         }
         return $DBConnect->sendQuery($sqlQuery,["id"=>$userID])->fetch(PDO::FETCH_OBJ);
     }

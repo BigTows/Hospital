@@ -6,13 +6,12 @@
 <main>
     <div class="row">
         <div class="col s1 l1"></div>
-        <div class="col s7 l7">
+        <div class="col s7 l7" style="margin-top: 20px">
             {if $smarty.capture.content ne ''}
                 {$smarty.capture.content}
             {/if}
         </div>
-        <div class="col s1 l1"></div>
-        <div class="col s3 l2" style="margin-top: 20px;">
+        <div class="col s3 l3" style="margin-top: 20px;">
             <div class="auth-panel card-panel">
                 {if $data.profile === NULL}
                 <span class="card-title">Авторизация</span>
@@ -44,37 +43,34 @@
                         </div>
                     </form>
                     {else}
-
                     <ul class="collection with-header">
-                        <li class="collection-header">Здравствуйте, {$data.profile.second_name} {$data.profile.first_name|truncate:2:"."}{$data.profile.middle_name|truncate:2:"."}</li>
-                        <li class="collection-item">
-                            <div>Профиль
-                                <a href="profile" class="secondary-content">
-                                    <i class="material-icons">perm_identity</i>
-                                </a>
-                            </div>
+                        <li class="collection-header">
+                            Здравствуйте, {$data.profile.second_name} {$data.profile.first_name|truncate:2:"."}{$data.profile.middle_name|truncate:2:"."}
                         </li>
-                        <li class="collection-item">
-                            <div>Записи к врачу
-                                <a href="#!" class="secondary-content">
-                                    <i class="material-icons">library_books</i>
-                                </a>
-                            </div>
-                        </li>
-                        <li class="collection-item">
-                            <div>История болезни
-                                <a href="#!" class="secondary-content">
-                                    <i class="material-icons">info</i>
-                                </a>
-                            </div>
-                        </li>
-                        <li class="collection-item">
-                            <div>Выйти
-                                <a href="exit" class="secondary-content">
-                                    <i class="material-icons">settings_power</i>
-                                </a>
-                            </div>
-                        </li>
+                        <a href="profile" class="collection-item">
+                            Профиль
+                            <span class="badge">
+                                <i class="material-icons">perm_identity</i>
+                            </span>
+                        </a>
+                        <a href="profile" class="collection-item">
+                            Записи к врачу
+                            <span class="badge">
+                                <i class="material-icons">library_books</i>
+                            </span>
+                        </a>
+                        <a href="profile" class="collection-item">
+                            История болезни
+                            <span class="badge">
+                                <i class="material-icons">info</i>
+                            </span>
+                        </a>
+                        <a href="exit" class="collection-item">
+                            Выйти
+                            <span class="badge">
+                                <i class="material-icons">settings_power</i>
+                            </span>
+                        </a>
                     </ul>
 
                     {/if}
