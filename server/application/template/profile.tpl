@@ -10,7 +10,7 @@
                 <div class="col s1"></div>
                 <div class="col s10">
                     <ul class="collection">
-                        <li class="collapsible-header center-align">Карта поциента</li>
+                        <li class="collapsible-header center-align">Карта пациента</li>
                         <li class="collection-item dismissable">
                             <div>Полис
                                 <a class="secondary-content">{$data.profile.polis}</a>

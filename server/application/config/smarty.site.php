@@ -12,7 +12,8 @@ $data = [
 $pages = [
   "main"=>"index.tpl",
     "profile"=>"profile.tpl",
-    "exit"=>"exit.tpl"
+    "exit"=>"exit.tpl",
+    "history"=>"history.tpl"
 ];
 
 function getPage($template){
@@ -21,22 +22,27 @@ function getPage($template){
     global $data;
     //Check for undefined Template
     $template = $template['tmp'] ?? "main";
-    actionOnPage($template);
+    $userID = AuthUtils::isAuth(session_id());
+    $data+=actionOnPage($template,$userID);
     //Get template name
     $template = $pages[$template] ?? $pages["main"];
-    $userID = AuthUtils::isAuth(session_id());
     if ($userID!=-1){
        $data["profile"]=json_decode(json_encode(AuthUtils::getProfile($userID)),true);
     }
     $smarty->assign("data",$data);
+    echo json_encode($data);
     return $template;
 }
 
-function actionOnPage($page){
+function actionOnPage($page,$idUser){
     switch ($page){
         case "exit":{
             AuthUtils::logout(session_id());
             break;
+        }
+        case "history":{
+            $data["history"]=AuthUtils::getHistory($idUser);
+            return $data;
         }
     }
 }

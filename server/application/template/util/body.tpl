@@ -59,7 +59,7 @@
                                 <i class="material-icons">library_books</i>
                             </span>
                         </a>
-                        <a href="profile" class="collection-item">
+                        <a href="history" class="collection-item">
                             История болезни
                             <span class="badge">
                                 <i class="material-icons">info</i>
