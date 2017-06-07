@@ -121,15 +121,28 @@ class AuthUtils
     {
         global $DBConnect;
         /**
-         * @TODO Rewrite select
+         * @TODO Fix 0,1,2 index on Array
          */
-        $array = array();
+        $array = [];
         $index = 0;
-        $stat = $DBConnect->sendQuery("SELECT history_user.date,history_user.text FROM history_user INNER JOIN doctor on doctor.id_doctor = history_user.id_doctor  WHERE id_user=:id", ["id" => $userID]);
-        while ($row = $stat->fetch(PDO::FETCH_OBJ)) {
-            $array[$index]= json_decode(json_encode($row),true);
+        $sqlQuery = "SELECT Date(history_user.date) as date,Time(history_user.date) as time,history_user.text, doctor.first_name,doctor.second_name,doctor.middle_name,
+        post.name as namePost
+ FROM history_user
+        INNER JOIN doctor on doctor.id_doctor = history_user.id_doctor
+          INNER JOIN appointments on appointments.id_doctor = doctor.id_doctor
+          INNER JOIN post on post.id_post = appointments.id_post
+          WHERE id_user=:id ORDER by history_user.date DESC";
+        $stat = $DBConnect->sendQuery($sqlQuery, ["id" => $userID]);
+        while ($row = $stat->fetch()) {
+            if (isset($array[$row['date']])){
+                $array[$row['date']]+= [count($array[$row['date']])=>json_decode(json_encode($row),true)];
+            }else{
+                $array[$row['date']]=[json_decode(json_encode($row),true)];
+            }
             $index++;
         }
+        json_decode(json_encode($array),true);
+        //echo json_encode($array,JSON_UNESCAPED_UNICODE);
         return $array;
     }
 
