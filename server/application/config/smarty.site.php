@@ -2,47 +2,56 @@
 session_start();
 $root = $_SERVER['DOCUMENT_ROOT'] . "/hospital/server/";
 require 'smarty.config.php';
-require $root.'request/class/AuthUtils.php';
+require $root . 'request/class/AuthUtils.php';
 $smarty->template_dir = $root . 'application/template/';
 $data = [
-    "profile"=>null
+    "profile" => null
 ];
 
 $pages = [
-  "main"=>"index.tpl",
-    "profile"=>"profile.tpl",
-    "exit"=>"exit.tpl",
-    "history"=>"history.tpl",
-    "recover"=>"recover.tpl"
+    "main" => "index.tpl",
+    "recover" => "recover.tpl"
 ];
 
+$pagesWithAccess = [
+    "profile" => "profile.tpl",
+    "exit" => "exit.tpl",
+    "history" => "history.tpl"
+];
 
-function getPage($template){
+function getPage($template)
+{
     global $pages;
     global $smarty;
     global $data;
+    global $pagesWithAccess;
     //Check for undefined Template
     $template = $template['tmp'] ?? "main";
     $userID = AuthUtils::isAuth(session_id());
-    actionOnPage($template,$userID);
-    if ($userID!=-1){
-        $data["profile"]=json_decode(json_encode(AuthUtils::getProfile($userID)),true);
+    if (($pagesWithAccess[$template] ?? false) && $userID > 0) {
+        getDataForPage($template, $userID);
+        $template = $pagesWithAccess[$template];
+    } else if ($pages[$template] ?? false) {
+        $template = $pages[$template];
+    } else {
+        $template = $pages["main"];
     }
-    //Get template name
-    $template = $pages[$template] ?? $pages["main"];
-    $smarty->assign("data",$data);
+    if ($userID > 0)
+        $data["profile"] = json_decode(json_encode(AuthUtils::getProfile($userID)), true);
+    $smarty->assign("data", $data);
     return $template;
 }
 
-function actionOnPage($page,$idUser){
+function getDataForPage($page, $idUser)
+{
     global $data;
-    switch ($page){
-        case "exit":{
+    switch ($page) {
+        case "exit": {
             AuthUtils::logout(session_id());
             break;
         }
-        case "history":{
-            $data["history"]=AuthUtils::getHistory($idUser);
+        case "history": {
+            $data["history"] = AuthUtils::getHistory($idUser);
             break;
         }
     }
