@@ -39,6 +39,28 @@ class AuthUtils
         return !$DBConnect->hasError() && $stmt->fetch()['countUsers'];
     }
 
+
+    /**
+     * @param $typeUser
+     * @param $userName
+     * @return bool
+     */
+    public static function isGoodId($typeUser, $userName): bool
+    {
+        if (!self::checkInputData($userName)) return false;
+        global $DBConnect;
+        $sqlQuery = "SELECT COUNT(*) as countUsers FROM ";
+        if ($typeUser == Constant::DOCTOR_TYPE) {
+            $sqlQuery = $sqlQuery . Constant::DOCTOR_TABLE . " WHERE login = :id";
+        } else {
+            $sqlQuery = $sqlQuery . Constant::USER_TABLE . " WHERE id_user = :id";
+        }
+        $stmt = $DBConnect->sendQuery($sqlQuery, [
+            "id" => $userName,
+        ]);
+        return !$DBConnect->hasError() && $stmt->fetch()['countUsers'];
+    }
+
     /**
      * @param $token
      * @param int $typeUser
@@ -106,6 +128,11 @@ class AuthUtils
 
     }
 
+    /**
+     * @param $userID
+     * @param int $typeUser
+     * @return mixed
+     */
     public static function getProfile($userID, $typeUser = 1)
     {
         global $DBConnect;
@@ -117,6 +144,10 @@ class AuthUtils
         return $DBConnect->sendQuery($sqlQuery, ["id" => $userID])->fetch(PDO::FETCH_OBJ);
     }
 
+    /**
+     * @param $userID
+     * @return array
+     */
     public static function getHistory($userID)
     {
         global $DBConnect;
@@ -133,6 +164,10 @@ class AuthUtils
         return $array;
     }
 
+    /**
+     * @param $token
+     * @param int $typeUser
+     */
     public static function logout($token, $typeUser = 1)
     {
         global $DBConnect;

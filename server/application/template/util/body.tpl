@@ -19,11 +19,13 @@
 
                     <form id="auth">
                         <div class="row">
-                            <div class="input-field col s12 l6">
+                            <div class="input-field col s12 l12">
+                                <i class="material-icons prefix" style="margin-top: 12px">person</i>
                                 <input id="auth-login" type="text" class="validate">
                                 <label for="login">Полис</label>
                             </div>
-                            <div class="input-field col s12 l6">
+                            <div class="input-field col s12 l12">
+                                <i class="material-icons prefix" style="margin-top: 12px">lock</i>
                                 <input id="auth-password" type="password" class="validate">
                                 <label for="password">Пароль</label>
                             </div>
@@ -56,19 +58,19 @@
                         <a href="profile" class="collection-item">
                             Записи к врачу
                             <span class="badge">
-                                <i class="material-icons">library_books</i>
+                                <i class="material-icons">mode_edit</i>
                             </span>
                         </a>
                         <a href="history" class="collection-item">
                             История болезни
                             <span class="badge">
-                                <i class="material-icons">info</i>
+                                <i class="material-icons">queue</i>
                             </span>
                         </a>
                         <a href="exit" class="collection-item">
                             Выйти
                             <span class="badge">
-                                <i class="material-icons">settings_power</i>
+                                <i class="material-icons">open_in_browser</i>
                             </span>
                         </a>
                     </ul>
