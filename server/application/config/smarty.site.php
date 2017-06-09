@@ -3,6 +3,7 @@ session_start();
 $root = $_SERVER['DOCUMENT_ROOT'] . "/hospital/server/";
 require 'smarty.config.php';
 require $root . 'request/class/AuthUtils.php';
+require $root . 'request/class/ControlUtils.php';
 $smarty->template_dir = $root . 'application/template/';
 $data = [
     "profile" => null
@@ -16,7 +17,8 @@ $pages = [
 $pagesWithAccess = [
     "profile" => "profile.tpl",
     "exit" => "exit.tpl",
-    "history" => "history.tpl"
+    "history" => "history.tpl",
+    "record" => "record.tpl"
 ];
 
 function getPage($template)
@@ -53,6 +55,9 @@ function getDataForPage($page, $idUser)
         case "history": {
             $data["history"] = AuthUtils::getHistory($idUser);
             break;
+        }
+        case "record":{
+            $data["record"] = ControlUtils::getListDoctors(session_id());
         }
     }
 }

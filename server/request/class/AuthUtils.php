@@ -91,7 +91,7 @@ class AuthUtils
         if (!self::checkInputData($userName)) return false;
         global $DBConnect;
         if ($typeUser == Constant::DOCTOR_TYPE) {
-            $userName = self::getIDUser($typeUser, $userName);
+            $userName = self::getIDUserFromName($typeUser, $userName);
             if ($userName == -1) return false;
             $sqlQuery = "INSERT INTO " . Constant::SESSION_DOCTOR_TABLE . " VALUES (:id,:token,CURRENT_TIMESTAMP()) ON DUPLICATE KEY UPDATE token=:token,date=CURRENT_TIMESTAMP();";
         } else {
@@ -111,7 +111,7 @@ class AuthUtils
      * @param $userName
      * @return int
      */
-    public static function getIDUser($typeUser, $userName): int
+    public static function getIDUserFromName($typeUser, $userName): int
     {
         if (!self::checkInputData($typeUser, $userName)) return -1;
         global $DBConnect;
@@ -127,6 +127,25 @@ class AuthUtils
         return $id ? intval($id) : -1;
 
     }
+
+
+    public static function getIDUserFromToken($token,$typeUser = 1):int{
+
+        if (!self::checkInputData($typeUser, $token)) return -1;
+        global $DBConnect;
+        if ($typeUser == Constant::DOCTOR_TYPE) {
+            $sqlQuery = "SELECT id_doctor as idU FROM " . Constant::SESSION_DOCTOR_TABLE . " WHERE token = :token";
+        } else {
+            $sqlQuery = "SELECT id_user as idU FROM " . Constant::SESSION_USER_TABLE . " WHERE token = :token";
+        }
+        $stmt = $DBConnect->sendQuery($sqlQuery, [
+            "token" => $token
+        ]);
+        $id = $stmt->fetch()['idU'];
+        return $id ? intval($id) : -1;
+
+    }
+
 
     /**
      * @param $userID

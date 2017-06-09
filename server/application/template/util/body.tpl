@@ -55,7 +55,7 @@
                                 <i class="material-icons">perm_identity</i>
                             </span>
                         </a>
-                        <a href="profile" class="collection-item">
+                        <a href="record" class="collection-item">
                             Записи к врачу
                             <span class="badge">
                                 <i class="material-icons">mode_edit</i>

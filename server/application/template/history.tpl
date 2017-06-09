@@ -5,12 +5,13 @@
             <div class="collapsible-header"><i class="material-icons">schedule</i>Дата: {$date}</div>
 
             {foreach item=record from=$item}
+
             <div class="collapsible-body">
-                <div class="collection">
+                <ul class="collection">
                     <a class="collection-item">Доктор: {$record.second_name} {$record.first_name|truncate:2:"."}{$record.middle_name|truncate:2:"."} ({$record.namePost})</a>
                     <a class="collection-item"> Время: {$record.time}</a>
                     <a  class="collection-item">Описание: {$record.text}</a>
-                </div>
+                </ul>
             </div>
             {/foreach}
         </li>
