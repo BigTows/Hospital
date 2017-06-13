@@ -15,11 +15,30 @@ require_once 'AuthUtils.php';
 class ControlUtils
 {
 
-    public static function getRecords($token){
-        $userID  = AuthUtils::getIDUserFromToken($token,2);
-        if ($userID<1){
-
+    public static function getRecords($token,$date=null):array {
+        $doctorID  = AuthUtils::getIDUserFromToken($token,2);
+        if ($doctorID>0){
+            $sqlQuery ="SELECT * FROM ".Constant::RECORD_VIEW." WHERE id_doctor=:id AND ";
+            global $DBConnect;
+            if ($date==null){
+                $sqlQuery.="date>=DATE_FORMAT(NOW(),'%y-%m-%d')";
+                $stmt = $DBConnect->sendQuery($sqlQuery,[
+                    "id"=>$doctorID
+                ]);
+            }else{
+                $sqlQuery.="date>=DATE_FORMAT(:date,'%y-%m-%d')";
+                $stmt = $DBConnect->sendQuery($sqlQuery,[
+                    "id"=>$doctorID,
+                    "date"=>$date
+                ]);
+            }
+            if ($DBConnect->hasError()){
+                return array();
+            }else{
+                return $stmt->fetchAll(PDO::FETCH_OBJ);
+            }
         }
+        return array();
 
     }
 

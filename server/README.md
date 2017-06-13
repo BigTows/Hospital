@@ -30,6 +30,17 @@ type_user     | Тип пользователя, варианты: 1 (Пацие
 2 | {"level":2,"messages":{"short":"You are not authorized","full":"Please use method %auth%"},"data":[]}
 
 
+### Метод getRecords (POST)
+ Параметры | Значения
+----------------|----------------------
+token     | Token - полученый после авторизации (auth метод)
+date     | Дата с которой нужно получить записи по умолчанию NOW()
+
+#### Примеры возврата
+ Код | JSON - config
+----------------|----------------------
+0     | {"level":0,"messages":{"short":"Success","full":"You is auth"},"data":[{"id_record":"1","date":"2017-06-13 18:08:02","id_user":"1234123412341234","first_name":"Александр","id_doctor":"1","second_name":"Чапчук","middle_name":"Юрьевич","sex":"1"}]}
+2 | {"level":2,"messages":{"short":"Bad input data","full":""},"data":[]}
 
 ## Структура Базы данных
 

@@ -68,6 +68,7 @@ class AuthUtils
      */
     public static function isAuth($token, $typeUser = 1): int
     {
+        if ($token==null) return -1;
         global $DBConnect;
         if ($typeUser == Constant::DOCTOR_TYPE) {
             $sqlQuery = "SELECT id_doctor as ID FROM " . Constant::SESSION_DOCTOR_TABLE . " WHERE token=:token";

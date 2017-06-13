@@ -22,4 +22,5 @@ class Constant
       const USER_TABLE = "user";
       const SESSION_DOCTOR_TABLE = "session_auth_doctor";
       const SESSION_USER_TABLE = "session_auth_user";
+      const RECORD_VIEW = "Records";
 }
