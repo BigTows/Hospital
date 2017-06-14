@@ -16,7 +16,7 @@ Interface::Interface(QWidget *parent)
     scene->setSceneRect(0,0,800,600);
     scene->setBackgroundBrush(QBrush(QImage(":/images/bg.jpg")));
 
-    editLogin = new QLineEdit;
+    Interface::editLogin = new QLineEdit;
     editLogin->setStyleSheet("border: 1px solid lightgreen;"
                              "font : 14px;");
     editLogin->setTextMargins(10,5,10,5);
@@ -54,7 +54,11 @@ void Interface::main_func()
 {
     QByteArray postData;
     postData.append("token=" + token + "&");
-    postData.append("date=2017-06-01");
+    postData.append("date=2017-06-13");
+/*
+    postData.append("token=" + token + "&");
+    postData.append("id_user=1234123412341234&");
+    postData.append("text=test keklol123   ");*/
 
     net = new QNetworkAccessManager();
     QObject::connect(net, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
@@ -62,6 +66,20 @@ void Interface::main_func()
     QNetworkRequest request(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
     request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
     net->post(request, postData);
+
+    /*QNetworkRequest request(QUrl("http://194.87.98.46/hospital/server/request/addHistory/"));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
+    net->post(request, postData);*/
+}
+
+QString Interface::editLoginText()
+{
+    //return editLogin->text();
+}
+
+QString Interface::editPasswordText()
+{
+    //return editPassword->text();
 }
 
 void Interface::onResult(QNetworkReply *reply)

@@ -14,6 +14,8 @@ class Interface:  public QGraphicsView
 public:
     Interface(QWidget * parent = 0);
     void main_func();
+    static QString editLoginText();
+    static QString editPasswordText();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;

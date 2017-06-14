@@ -24,10 +24,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp \
-    interface.cpp
+    interface.cpp \
+    network.cpp
 
 HEADERS  += \
-    interface.h
+    interface.h \
+    network.h
 
 FORMS    +=
 
