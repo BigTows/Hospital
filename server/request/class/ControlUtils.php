@@ -42,8 +42,23 @@ class ControlUtils
 
     }
 
-    public static function addRecord($token,$idUser,$text){
-        
+    public static function addHistory($token,$idUser,$text):bool{
+        $idDoctor  = AuthUtils::getIDUserFromToken($token,2);
+        if ($idDoctor>0){
+            $sqlQuery = "INSERT INTO `history_user` (`id_user`, `id_doctor`, `text`,`date`) VALUES (:idUser,:idDoctor,:text,CURRENT_TIMESTAMP())";
+            global $DBConnect;
+            $stmt = $DBConnect->sendQuery($sqlQuery,[
+                "idUser"=>$idUser,
+                "idDoctor"=>$idDoctor,
+                "text"=>$text]);
+            if ($DBConnect->hasError()){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            return false;
+        }
     }
 
     public static function getListDoctors($token){
