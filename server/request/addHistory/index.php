@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * File: index.php.
  * Created: bigtows.
- * Created date: 08/06/2017  18:05
+ * Created date: 14/06/2017  20:36
  * Description:
  */
 session_start();
@@ -13,8 +13,9 @@ require_once $root . "application/class/Response.php";
 require_once "../class/AuthUtils.php";
 require_once "../class/ControlUtils.php";
 $token=$_POST['token'] ?? null;
-$date = $_POST['date'] ?? null;
-    if (AuthUtils::isAuth($token, 2)>0) {
+$idUser = $_POST['id_user'] ?? null;
+$text = $_POST['text'] ?? null;
+if (AuthUtils::isAuth($token, 2)>0) {
     $response = new Response("Success", "You is auth", ControlUtils::getRecords($token,$date), 0);
 } else {
     $response = new Response("Bad input data", "", [], 2);

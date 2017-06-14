@@ -21,12 +21,12 @@ class ControlUtils
             $sqlQuery ="SELECT * FROM ".Constant::RECORD_VIEW." WHERE id_doctor=:id AND ";
             global $DBConnect;
             if ($date==null){
-                $sqlQuery.="date>=DATE_FORMAT(NOW(),'%y-%m-%d')";
+                $sqlQuery.="date(date)>=date(NOW())";
                 $stmt = $DBConnect->sendQuery($sqlQuery,[
                     "id"=>$doctorID
                 ]);
             }else{
-                $sqlQuery.="date>=DATE_FORMAT(:date,'%y-%m-%d')";
+                $sqlQuery.="date(date)=date(:date)";
                 $stmt = $DBConnect->sendQuery($sqlQuery,[
                     "id"=>$doctorID,
                     "date"=>$date
@@ -40,6 +40,10 @@ class ControlUtils
         }
         return array();
 
+    }
+
+    public static function addRecord($token,$idUser,$text){
+        
     }
 
     public static function getListDoctors($token){
