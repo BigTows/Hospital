@@ -16,7 +16,7 @@ $token=$_POST['token'] ?? null;
 $idUser = $_POST['id_user'] ?? null;
 $text = $_POST['text'] ?? null;
 if (AuthUtils::isAuth($token, 2)>0) {
-    if (ControlUtils::addRecord($token,$idUser,$text)) {
+    if (ControlUtils::addHistory($token,$idUser,$text)) {
         $response = new Response("Success", "Your added", [], 0);
     }else{
         $response = new Response("Warning", "Error db", [], 1);
