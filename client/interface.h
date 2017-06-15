@@ -14,6 +14,8 @@ class Interface:  public QGraphicsView
 public:
     Interface(QWidget * parent = 0);
     void main_func();
+    void auth();
+    void getRecords();
     static QString editLoginText();
     static QString editPasswordText();
 private:
@@ -23,10 +25,13 @@ private:
     QPushButton * bt;
     QNetworkAccessManager * net;
     QString token = "";
+    int level = 999;
     QString name = "";
-public slots:
-    void onResult(QNetworkReply *reply);
+    QByteArray postData;
+    QNetworkRequest request;
 private slots:
+    void onAuthResult(QNetworkReply *reply);
+    void ongetRecordsResult(QNetworkReply *reply);
     void on_EnterButton_Clicked();
 };
 

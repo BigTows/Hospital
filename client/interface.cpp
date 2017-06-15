@@ -43,6 +43,8 @@ Interface::Interface(QWidget *parent)
     scene->addWidget(bt);
     //scene->setFocusItem(editLogin,Qt::OtherFocusReason);
 
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
     setScene(scene);
 
     editLogin->move(scene->width() / 2 - editLogin->width() / 2, 200);
@@ -51,16 +53,17 @@ Interface::Interface(QWidget *parent)
 }
 
 void Interface::main_func()
-{
+{/*
     QByteArray postData;
     postData.append("token=" + token + "&");
     postData.append("date=2017-06-13");
-/*
+
     postData.append("token=" + token + "&");
     postData.append("id_user=1234123412341234&");
-    postData.append("text=test keklol123   ");*/
+    postData.append("text=test keklol123   ");
 
     net = new QNetworkAccessManager();
+
     QObject::connect(net, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
 
     QNetworkRequest request(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
@@ -70,6 +73,41 @@ void Interface::main_func()
     /*QNetworkRequest request(QUrl("http://194.87.98.46/hospital/server/request/addHistory/"));
     request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
     net->post(request, postData);*/
+
+    getRecords();
+}
+
+void Interface::auth()
+{
+    postData.clear();
+
+    request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/auth/"));
+
+    postData.append("name=" + editLogin->text() + "&");
+    postData.append("password=" + editPassword->text() + "&");
+    postData.append("type_user=2");
+
+    net = new QNetworkAccessManager();
+
+    QObject::connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(onAuthResult(QNetworkReply*)));
+
+    net->post(request, postData);
+}
+
+void Interface::getRecords()
+{
+    postData.clear();
+
+    request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
+
+    postData.append("token=" + token + "&");
+    postData.append("date=2017-06-13");
+
+    net = new QNetworkAccessManager();
+
+    QObject::connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(ongetRecordsResult(QNetworkReply*)));
+
+    net->post(request, postData);
 }
 
 QString Interface::editLoginText()
@@ -82,7 +120,7 @@ QString Interface::editPasswordText()
     //return editPassword->text();
 }
 
-void Interface::onResult(QNetworkReply *reply)
+void Interface::onAuthResult(QNetworkReply *reply)
 {
     if(!reply->error())
     {
@@ -91,59 +129,52 @@ void Interface::onResult(QNetworkReply *reply)
 
            QJsonObject root = document.object();
 
-           qDebug() << root;
-
            QJsonObject jv = root.value("data").toObject();
 
            token = jv.value("token").toString();
 
-           if (token == "")
-           {
-               QJsonObject root = document.object();
-
-                      QJsonValue jv = root.value("data");
-
-                      if(jv.isArray())
-                      {
-
-
-                          QJsonArray ja = jv.toArray();
-
-                          for(int i = 0; i < ja.count(); i++)
-                          {
-                              QJsonObject subtree = ja.at(i).toObject();
-
-                              qDebug() << subtree.value("first_name").toString() + " " +
-                                                   subtree.value("second_name").toString();
-                          }
-                      }
-           }
+           level = root.value("level").toInt();
 
     }
 
-    if (token != "")
+    if (level == 0)
     {
-        qDebug() << token;
+        //qDebug() << token;
         //token = "";
+        level == 999;
         bt->hide();
         editLogin->hide();
         editPassword->hide();
         main_func();
     }
+    level == 999;
     reply->deleteLater();
+}
+
+void Interface::ongetRecordsResult(QNetworkReply *reply)
+{
+
+    QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+    QJsonObject root = document.object();
+    QJsonValue jv = root.value("data");
+
+    if(jv.isArray())
+    {
+        QJsonArray ja = jv.toArray();
+
+            for(int i = 0; i < ja.count(); i++)
+               {
+                   QJsonObject subtree = ja.at(i).toObject();
+
+                   qDebug() << subtree.value("first_name").toString() + " " +
+                                        subtree.value("second_name").toString();
+               }
+     }
+    level = root.value("level").toInt();
+    qDebug() << level;
 }
 
 void Interface::on_EnterButton_Clicked()
 {
-    QByteArray postData;
-    postData.append("name=" + editLogin->text() + "&");
-    postData.append("password=" + editPassword->text() + "&");
-    postData.append("type_user=2");
-
-    net = new QNetworkAccessManager();
-    QObject::connect(net, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
-
-    QNetworkRequest request(QUrl("http://194.87.98.46/hospital/server/request/auth/"));
-    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
-    net->post(request, postData);
+    auth();
 }
