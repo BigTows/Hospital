@@ -6,6 +6,8 @@
 #include <QtNetwork>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QListWidget>
+#include <vector>
 
 
 class Interface:  public QGraphicsView
@@ -16,17 +18,22 @@ public:
     void main_func();
     void auth();
     void getRecords();
-    static QString editLoginText();
-    static QString editPasswordText();
+    void hide_auth_window();
+    void draw_ui();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
     QLineEdit * editPassword;
+    QListWidget * list;
     QPushButton * bt;
     QNetworkAccessManager * net;
+
     QString token = "";
     int level = 999;
     QString name = "";
+
+    std::vector<QString> mas;
+
     QByteArray postData;
     QNetworkRequest request;
 private slots:

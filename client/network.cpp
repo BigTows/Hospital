@@ -16,8 +16,8 @@ void Network::auth()
 
     request->setUrl(QUrl("http://194.87.98.46/hospital/server/request/auth/"));
 
-    postData->append("name=" + Interface::editLoginText() + "&");
-    postData->append("password=" + Interface::editPasswordText() + "&");
+    //postData->append("name=" + Interface::editLoginText() + "&");
+    //postData->append("password=" + Interface::editPasswordText() + "&");
     postData->append("type_user=2");
 
     QObject::connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(onResult(QNetworkReply*)),Qt::AutoConnection);

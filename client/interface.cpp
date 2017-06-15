@@ -16,7 +16,7 @@ Interface::Interface(QWidget *parent)
     scene->setSceneRect(0,0,800,600);
     scene->setBackgroundBrush(QBrush(QImage(":/images/bg.jpg")));
 
-    Interface::editLogin = new QLineEdit;
+    editLogin = new QLineEdit;
     editLogin->setStyleSheet("border: 1px solid lightgreen;"
                              "font : 14px;");
     editLogin->setTextMargins(10,5,10,5);
@@ -31,7 +31,7 @@ Interface::Interface(QWidget *parent)
 
     bt = new QPushButton("Войти", nullptr);
     bt->setStyleSheet("color: white;"
-                      "border: 1px solid darkgray;"
+                      //"border: 1px solid darkgray;"
                       "background-color: green;"
                       "font : 20px;");
     bt->setGeometry(0,0,100,30);
@@ -41,7 +41,6 @@ Interface::Interface(QWidget *parent)
     scene->addWidget(editLogin);
     scene->addWidget(editPassword);
     scene->addWidget(bt);
-    //scene->setFocusItem(editLogin,Qt::OtherFocusReason);
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
@@ -51,6 +50,7 @@ Interface::Interface(QWidget *parent)
     editPassword->move(scene->width() / 2 - editPassword->width() / 2, 250);
     bt->move(scene->width() / 2 - bt->width() / 2, 300);
 }
+
 
 void Interface::main_func()
 {/*
@@ -110,14 +110,27 @@ void Interface::getRecords()
     net->post(request, postData);
 }
 
-QString Interface::editLoginText()
+void Interface::hide_auth_window()
 {
-    //return editLogin->text();
+    level == 999;
+    bt->hide();
+    editLogin->hide();
+    editPassword->hide();
 }
 
-QString Interface::editPasswordText()
+void Interface::draw_ui()
 {
-    //return editPassword->text();
+    list = new QListWidget();
+    //list->setStyleSheet("background-color: green;");
+    list->resize(300, 300);
+    qDebug() << mas.size();
+    for (int i = 0; i < mas.size(); i++)
+    {
+        qDebug() << i;
+        list->addItem(mas[i]);
+    }
+
+    scene->addWidget(list);
 }
 
 void Interface::onAuthResult(QNetworkReply *reply)
@@ -139,15 +152,12 @@ void Interface::onAuthResult(QNetworkReply *reply)
 
     if (level == 0)
     {
-        //qDebug() << token;
-        //token = "";
-        level == 999;
-        bt->hide();
-        editLogin->hide();
-        editPassword->hide();
-        main_func();
+        hide_auth_window();
+        getRecords();
     }
-    level == 999;
+    else
+        level = 999;
+
     reply->deleteLater();
 }
 
@@ -158,6 +168,8 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
     QJsonObject root = document.object();
     QJsonValue jv = root.value("data");
 
+    qDebug() << root;
+
     if(jv.isArray())
     {
         QJsonArray ja = jv.toArray();
@@ -166,12 +178,24 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
                {
                    QJsonObject subtree = ja.at(i).toObject();
 
-                   qDebug() << subtree.value("first_name").toString() + " " +
-                                        subtree.value("second_name").toString();
+                   mas.insert(mas.end(), subtree.value("date").toString().mid(11) + "   " +
+                              subtree.value("second_name").toString() + " " +
+                              subtree.value("first_name").toString() + " " +
+                              subtree.value("middle_name").toString()
+                              );
+
+               //    qDebug() << subtree.value("first_name").toString() + " " +
+                //                        subtree.value("second_name").toString();
+                   qDebug() << subtree.value("date").toString();
                }
      }
     level = root.value("level").toInt();
-    qDebug() << level;
+
+    if (level == 0)
+    {
+        draw_ui();
+    }
+   // qDebug() << level;
 }
 
 void Interface::on_EnterButton_Clicked()
