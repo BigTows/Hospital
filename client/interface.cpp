@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QList>
-
+#include <QInputDialog>
 
 Interface::Interface(QWidget *parent)
 {
@@ -101,7 +101,9 @@ void Interface::getRecords()
     request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
 
     postData.append("token=" + token + "&");
-    postData.append("date=2017-06-13");
+    postData.append("date=" + date);
+    qDebug() << date;
+
 
     net = new QNetworkAccessManager();
 
@@ -109,6 +111,8 @@ void Interface::getRecords()
 
     net->post(request, postData);
 }
+
+
 
 void Interface::hide_auth_window()
 {
@@ -118,19 +122,74 @@ void Interface::hide_auth_window()
     editPassword->hide();
 }
 
-void Interface::draw_ui()
+void Interface::draw_list()
 {
     list = new QListWidget();
-    //list->setStyleSheet("background-color: green;");
-    list->resize(300, 300);
+    list->setStyleSheet("background-color: lightblue;");
+    list->resize(700,550);
+    list->move(50,25);
+
+    connect(list,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(itemClicked(QListWidgetItem*)));
+
     qDebug() << mas.size();
     for (int i = 0; i < mas.size(); i++)
     {
         qDebug() << i;
-        list->addItem(mas[i]);
+        list->addItem(mas[i].mid(16));
     }
 
     scene->addWidget(list);
+}
+
+void Interface::draw_calendar()
+{
+    calendar = new QCalendarWidget;
+    scene->addWidget(calendar);
+    QPushButton * showbt = new QPushButton;
+    showbt->setText("Показать");
+    showbt->move(0,400);
+    scene->addWidget(showbt);
+    connect(showbt,SIGNAL(clicked(bool)),this,SLOT(on_showbt_Clicked()));
+}
+
+void Interface::addHistory()
+{
+    postData.clear();
+
+    request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/addHistory/"));
+
+    postData.append("token=" + token + "&");
+    postData.append("id_user=" + mas[list->currentRow()].mid(0,16) + "&");
+    postData.append("text=" + str);
+    qDebug() << str;
+
+    net = new QNetworkAccessManager();
+
+    net->post(request, postData);
+}
+
+void Interface::itemClicked(QListWidgetItem *item)
+{
+
+    str = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
+    if (str != "")
+    {
+        addHistory();
+    }
+
+}
+
+void Interface::on_showbt_Clicked()
+{
+    //qDebug() << calendar->selectedDate().year();
+    draw_list();
+
+    date = QString::number(calendar->selectedDate().year()) + "-" + QString::number(calendar->selectedDate().month());
+    date += "-" + QString::number(calendar->selectedDate().day());
+
+    //qDebug() << date;
+    calendar->hide();
+    getRecords();
 }
 
 void Interface::onAuthResult(QNetworkReply *reply)
@@ -153,7 +212,8 @@ void Interface::onAuthResult(QNetworkReply *reply)
     if (level == 0)
     {
         hide_auth_window();
-        getRecords();
+        draw_calendar();
+        //getRecords();
     }
     else
         level = 999;
@@ -178,7 +238,7 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
                {
                    QJsonObject subtree = ja.at(i).toObject();
 
-                   mas.insert(mas.end(), subtree.value("date").toString().mid(11) + "   " +
+                   mas.insert(mas.end(), subtree.value("id_user").toString() + subtree.value("date").toString().mid(11) + "   " +
                               subtree.value("second_name").toString() + " " +
                               subtree.value("first_name").toString() + " " +
                               subtree.value("middle_name").toString()
@@ -193,9 +253,9 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
 
     if (level == 0)
     {
-        draw_ui();
+        draw_list();
     }
-   // qDebug() << level;
+    // qDebug() << level;
 }
 
 void Interface::on_EnterButton_Clicked()
