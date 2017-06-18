@@ -10,7 +10,7 @@
 #include <vector>
 #include <QCalendarWidget>
 #include <QLabel>
-
+#include "user.h"
 
 class Interface:  public QGraphicsView
 {
@@ -24,6 +24,7 @@ public:
     void draw_calendar();
     void addHistory();
     void hideListfucn();
+    void loadPicture();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
@@ -38,17 +39,17 @@ private:
 
     QString token = "";
     QString str = "";
-    QString date = "";
     int level = 999;
-    QString name = "";
+    //QString name = "";
 
-    std::vector<QString> mas;
+    std::vector<MyUser> mas;
 
     QByteArray postData;
     QNetworkRequest request;
 private slots:
     void onAuthResult(QNetworkReply *reply);
     void ongetRecordsResult(QNetworkReply *reply);
+    void onloadPictureResult(QNetworkReply *reply);
     void on_EnterButton_Clicked();
     void itemClicked(QListWidgetItem* item);
     void calendarSelection();

@@ -66,7 +66,6 @@ Interface::Interface(QWidget *parent)
                          "background:transparent;");
     label->hide();
 
-
     scene->addWidget(editLogin);
     scene->addWidget(editPassword);
     scene->addWidget(bt);
@@ -116,8 +115,8 @@ void Interface::getRecords()
     request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
 
     postData.append("token=" + token + "&");
-    postData.append("date=" + date);
-    qDebug() << date;
+    postData.append("date=" + calendar->selectedDate().toString("yyyy-MM-dd"));
+    //qDebug() << date;
 
 
     net = new QNetworkAccessManager();
@@ -131,7 +130,7 @@ void Interface::getRecords()
 
 void Interface::hide_auth_window()
 {
-    level == 999;
+    level = 999;
     bt->hide();
     editLogin->hide();
     editPassword->hide();
@@ -144,9 +143,9 @@ void Interface::fill_list()
     list->clear();
     backButton->show();
 
-    for (int i = 0; i < mas.size(); i++)
+    for (unsigned int i = 0; i < mas.size(); i++)
     {
-        list->addItem(mas[i].mid(16));
+        list->addItem(mas[i].date + "    " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name + "    " + mas[i].id_user);
     }
 
 }
@@ -170,7 +169,7 @@ void Interface::addHistory()
     request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/addHistory/"));
 
     postData.append("token=" + token + "&");
-    postData.append("id_user=" + mas[list->currentRow()].mid(0,16) + "&");
+    postData.append("id_user=" + mas[list->currentRow()].id_user + "&");
     postData.append("text=" + str);
     qDebug() << str;
 
@@ -185,9 +184,19 @@ void Interface::hideListfucn()
     backButton->hide();
 }
 
+void Interface::loadPicture()
+{
+    request.setUrl(QUrl("https://pp.userapi.com/c620126/v620126184/15af5/a171MPR6ArM.jpg"));
+
+    net = new QNetworkAccessManager();
+
+    connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(onloadPictureResult(QNetworkReply*)));
+
+    net->get(request);
+}
+
 void Interface::itemClicked(QListWidgetItem *item)
 {
-
     str = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
     if (str != "")
     {
@@ -198,9 +207,6 @@ void Interface::itemClicked(QListWidgetItem *item)
 
 void Interface::calendarSelection()
 {
-    // В переменную date записываем в виде yyyy-mm-dd, по костыльному. Перенос из - за ограничения длины конкатинации
-    date = QString::number(calendar->selectedDate().year()) + "-" + QString::number(calendar->selectedDate().month());
-    date += "-" + QString::number(calendar->selectedDate().day());
 
     fill_list();
 
@@ -263,12 +269,12 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
                {
                    QJsonObject subtree = ja.at(i).toObject();
 
-                   mas.insert(mas.end(), subtree.value("id_user").toString() + subtree.value("date").toString().mid(11) + "   " +
-                              subtree.value("second_name").toString() + " " +
-                              subtree.value("first_name").toString() + " " +
-                              subtree.value("middle_name").toString() + "   " +
-                              subtree.value("id_user").toString()
-                              );
+                   mas.insert(mas.end(), MyUser());
+                   mas[i].id_user = subtree.value("id_user").toString();
+                   mas[i].second_name = subtree.value("second_name").toString();
+                   mas[i].first_name = subtree.value("first_name").toString();
+                   mas[i].middle_name = subtree.value("middle_name").toString();
+                   mas[i].date = subtree.value("date").toString().mid(11);
                }
      }
     level = root.value("level").toInt();
@@ -277,7 +283,16 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
     {
         fill_list();
     }
-    // qDebug() << level;
+}
+
+void Interface::onloadPictureResult(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError)
+       {
+           QByteArray data = reply->readAll();
+           QImage image = QImage::fromData(data);
+           backButton->setIcon(QIcon(QPixmap::fromImage(image)));
+       }
 }
 
 void Interface::on_EnterButton_Clicked()
