@@ -1,4 +1,5 @@
 {capture name=content}
+    <script src="media/JavaScript/DatePicker.js"></script>
     <div class="col s10 card-panel">
 
         <div class="row">
@@ -31,11 +32,8 @@
                 <h4>Выбор времени</h4>
                 <br>
                 <div class="row">
-                <div class="input-field col s6">
-                    <select id="month-picker">
-                        <option value="" disabled selected>Месяц</option>
-                    </select>
-                    <label>Materialize Select</label>
+                <div id="date" class="input-field col s6">
+
                 </div>
 
                 <div id="time-table">
@@ -50,8 +48,16 @@
 
     </div>
     <script>
+        var months = ["Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентебря","Октября","Ноября","Декабря"];
+        var dateNow = new Date();
+        var datePicker=  new DatePicker(document.getElementById("date"));
+        datePicker.init();
+
+
         $(document).ready(function(){
             $('.modal').modal();
+
+
         });
         function modal(id,timeStartWork,timeEndWork){
             var dateNow = new Date();
