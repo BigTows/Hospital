@@ -9,6 +9,7 @@
 #include <QListWidget>
 #include <vector>
 #include <QCalendarWidget>
+#include <QLabel>
 
 
 class Interface:  public QGraphicsView
@@ -16,13 +17,13 @@ class Interface:  public QGraphicsView
     Q_OBJECT
 public:
     Interface(QWidget * parent = 0);
-    void main_func();
     void auth();
     void getRecords();
     void hide_auth_window();
-    void draw_list();
+    void fill_list();
     void draw_calendar();
     void addHistory();
+    void hideListfucn();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
@@ -31,6 +32,9 @@ private:
     QPushButton * bt;
     QNetworkAccessManager * net;
     QCalendarWidget * calendar;
+    QPushButton * showButton;
+    QPushButton * backButton;
+    QLabel * label;
 
     QString token = "";
     QString str = "";
@@ -47,7 +51,8 @@ private slots:
     void ongetRecordsResult(QNetworkReply *reply);
     void on_EnterButton_Clicked();
     void itemClicked(QListWidgetItem* item);
-    void on_showbt_Clicked();
+    void calendarSelection();
+    void onbackButtonClick();
 };
 
 #endif // INTERFACE_H
