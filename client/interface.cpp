@@ -170,8 +170,8 @@ void Interface::addHistory()
 
     postData.append("token=" + token + "&");
     postData.append("id_user=" + mas[list->currentRow()].id_user + "&");
-    postData.append("text=" + str);
-    qDebug() << str;
+    postData.append("text=" + str_getText);
+    qDebug() << str_getText;
 
     net = new QNetworkAccessManager();
 
@@ -197,8 +197,8 @@ void Interface::loadPicture()
 
 void Interface::itemClicked(QListWidgetItem *item)
 {
-    str = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
-    if (str != "")
+    str_getText = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
+    if (str_getText != "")
     {
         addHistory();
     }

@@ -38,9 +38,8 @@ private:
     QLabel * label;
 
     QString token = "";
-    QString str = "";
+    QString str_getText = "";
     int level = 999;
-    //QString name = "";
 
     std::vector<MyUser> mas;
 
