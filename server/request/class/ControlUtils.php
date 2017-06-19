@@ -12,29 +12,34 @@ $root = $_SERVER['DOCUMENT_ROOT'] . "/hospital/server/";
 require_once $root . "application/config/config.php";
 require_once $root . "application/class/constant/Constant.php";
 require_once 'AuthUtils.php';
+
 class ControlUtils
 {
 
-    public static function getRecords($token,$date=null):array {
-        $doctorID  = AuthUtils::getIDUserFromToken($token,2);
-        if ($doctorID>0){
-            $sqlQuery ="SELECT * FROM ".Constant::RECORD_VIEW." WHERE id_doctor=:id AND ";
+    public static function getRecords($token, $period = false, $date = null): array
+    {
+        $doctorID = AuthUtils::getIDUserFromToken($token, 2);
+        if ($doctorID > 0) {
+            $sqlQuery = "SELECT * FROM " . Constant::RECORD_VIEW . " WHERE id_doctor=:id AND ";
             global $DBConnect;
-            if ($date==null){
-                $sqlQuery.="date(date)>=date(NOW())";
-                $stmt = $DBConnect->sendQuery($sqlQuery,[
-                    "id"=>$doctorID
+            if ($date == null) {
+                $sqlQuery .= "date(date)>=date(NOW())";
+                $stmt = $DBConnect->sendQuery($sqlQuery, [
+                    "id" => $doctorID
                 ]);
-            }else{
-                $sqlQuery.="date(date)=date(:date)";
-                $stmt = $DBConnect->sendQuery($sqlQuery,[
-                    "id"=>$doctorID,
-                    "date"=>$date
+            } else {
+
+                $sqlQuery .= "date(date)";
+                if ($period) $sqlQuery .= ">";
+                $sqlQuery .= "=date(:date)";
+                $stmt = $DBConnect->sendQuery($sqlQuery, [
+                    "id" => $doctorID,
+                    "date" => $date
                 ]);
             }
-            if ($DBConnect->hasError()){
+            if ($DBConnect->hasError()) {
                 return array();
-            }else{
+            } else {
                 return $stmt->fetchAll(PDO::FETCH_OBJ);
             }
         }
@@ -42,36 +47,54 @@ class ControlUtils
 
     }
 
-    public static function addHistory($token,$idUser,$text):bool{
-        $idDoctor  = AuthUtils::getIDUserFromToken($token,2);
-        if ($idDoctor>0){
+    public static function addHistory($token, $idUser, $text): bool
+    {
+        $idDoctor = AuthUtils::getIDUserFromToken($token, 2);
+        if ($idDoctor > 0) {
             $sqlQuery = "INSERT INTO `history_user` (`id_user`, `id_doctor`, `text`,`date`) VALUES (:idUser,:idDoctor,:text,CURRENT_TIMESTAMP())";
             global $DBConnect;
-            $stmt = $DBConnect->sendQuery($sqlQuery,[
-                "idUser"=>$idUser,
-                "idDoctor"=>$idDoctor,
-                "text"=>$text]);
-            if ($DBConnect->hasError()){
+            $stmt = $DBConnect->sendQuery($sqlQuery, [
+                "idUser" => $idUser,
+                "idDoctor" => $idDoctor,
+                "text" => $text]);
+            if ($DBConnect->hasError()) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
-        }else{
+        } else {
             return false;
         }
     }
 
-    public static function getListDoctors($token){
-        if (AuthUtils::isAuth($token)){
+    public static function getHistory($idUser, $count = 5)
+    {
+        $sqlQuery = "SELECT * FROM `history_user` WHERE id_user=:id LIMIT :count";
+        global $DBConnect;
+        $stmt = $DBConnect->sendQuery($sqlQuery, [
+            "id" => $idUser,
+            "count" => $count], PDO::PARAM_INT
+        );
+        if ($DBConnect->hasError()) {
+            echo json_encode($stmt->errorInfo());
+            return [];
+        } else {
+            return json_decode(json_encode($stmt->fetchAll(PDO::FETCH_OBJ)));
+        }
+    }
+
+    public static function getListDoctors($token)
+    {
+        if (AuthUtils::isAuth($token)) {
 
             global $DBConnect;
             $stmt = $DBConnect->sendQuery("SELECT * FROM Doctors");
-            if ($DBConnect->hasError()){
+            if ($DBConnect->hasError()) {
                 return null;
-            }else{
+            } else {
                 return $stmt->fetchAll();
             }
-        }else{
+        } else {
             return null;
         }
     }

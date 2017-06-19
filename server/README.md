@@ -34,6 +34,7 @@ type_user     | Тип пользователя, варианты: 1 (Пацие
  Параметры | Значения
 ----------------|----------------------
 token     | Token - полученый после авторизации (auth метод)
+period | Если true, то возвращает с той даты которая была указана
 date     | Дата с которой нужно получить записи по умолчанию NOW()
 
 #### Примеры возврата
@@ -54,6 +55,35 @@ text     | Описание
 ----------------|----------------------
 0     | {"level":0,"messages":{"short":"Success","full":"You is auth"},"data":[{"id_record":"1","date":"2017-06-13 18:08:02","id_user":"1234123412341234","first_name":"Александр","id_doctor":"1","second_name":"Чапчук","middle_name":"Юрьевич","sex":"1"}]}
 2 | {"level":2,"messages":{"short":"Bad input data","full":""},"data":[]}
+
+
+### Метод getUser (POST)
+ Параметры | Значения
+----------------|----------------------
+token     | Token - полученый после авторизации (auth метод) Токен только врача
+id_user  | Полис пользователя
+
+#### Примеры возврата
+ Код | JSON - config
+----------------|----------------------
+0     | {"level":0,"messages":{"short":"Success","full":"Send data"},"data":{"polis":"1234123412341234","first_name":"Александр","second_name":"Чапчук","middle_name":"Юрьевич","sex":"1","phone":"79060780162","date":"1998-07-25","email":"gasfull@mail.ru","photo":"https:\/\/pp.userapi.com\/c620126\/v620126184\/15af5\/a171MPR6ArM.jpg"}}
+2 | {"level":2,"messages":{"short":"You are not authorized","full":"Please use method %auth%"},"data":[]}
+
+
+### Метод getHistory (POST)
+ Параметры | Значения
+----------------|----------------------
+token     | Token - полученый после авторизации (auth метод) Токен только врача
+id_user  | Полис пользователя
+count | Кол-во записей, по умолчанию 5
+
+#### Примеры возврата
+ Код | JSON - config
+----------------|----------------------
+0     | {"level":0,"messages":{"short":"Success","full":"Send data"},"data":[{"id_history":"1","id_user":"1234123412341234","id_doctor":"1","text":"Ты болен","date":"2017-06-01 14:13:39"},{"id_history":"2","id_user":"1234123412341234","id_doctor":"1","text":"Тест","date":"2017-06-07 12:34:18"},{"id_history":"3","id_user":"1234123412341234","id_doctor":"1","text":"Тест2","date":"2017-06-07 12:34:28"},{"id_history":"4","id_user":"1234123412341234","id_doctor":"1","text":"l55uf4606drr4h288mi512d1q1","date":"2017-06-14 21:45:47"},{"id_history":"5","id_user":"1234123412341234","id_doctor":"1","text":"l55uf4606drr4h288mi512d1q1","date":"2017-06-14 21:48:02"}]}
+2 | {"level":2,"messages":{"short":"You are not authorized","full":"Please use method %auth%"},"data":[]}
+
+
 
 ## Структура Базы данных
 
