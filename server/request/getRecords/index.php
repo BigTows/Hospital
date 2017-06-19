@@ -14,8 +14,9 @@ require_once "../class/AuthUtils.php";
 require_once "../class/ControlUtils.php";
 $token=$_POST['token'] ?? null;
 $date = $_POST['date'] ?? null;
+$period =$_POST['period'] ?? false;
     if (AuthUtils::isAuth($token, 2)>0) {
-    $response = new Response("Success", "You is auth", ControlUtils::getRecords($token,$date), 0);
+    $response = new Response("Success", "You is auth", ControlUtils::getRecords($token,$period,$date), 0);
 } else {
     $response = new Response("Bad input data", "", [], 2);
 }
