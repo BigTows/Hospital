@@ -9,7 +9,8 @@ struct MyUser
     QString first_name;
     QString second_name;
     QString middle_name;
-    QString date;
+    QDate date;
+    QString time;
 };
 
 

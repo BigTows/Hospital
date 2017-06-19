@@ -107,7 +107,7 @@ void Interface::auth()
     net->post(request, postData);
 }
 
-void Interface::getRecords()
+void Interface::getRecords(bool from)
 {
     mas.clear();
     postData.clear();
@@ -115,8 +115,14 @@ void Interface::getRecords()
     request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
 
     postData.append("token=" + token + "&");
-    postData.append("date=" + calendar->selectedDate().toString("yyyy-MM-dd"));
-    //qDebug() << date;
+    if (from)
+    {
+    postData.append("date=" + date.toString("yyyy-MM-dd") + "&");
+    postData.append("period=true");
+    }
+    else
+        postData.append("date=" + date.toString("yyyy-MM-dd"));
+    qDebug() << date.toString();
 
 
     net = new QNetworkAccessManager();
@@ -143,10 +149,13 @@ void Interface::fill_list()
     list->clear();
     backButton->show();
 
+    QTextCharFormat charformat;
+    charformat.setBackground(QBrush(QColor(0, 230, 94, 100)));
     for (unsigned int i = 0; i < mas.size(); i++)
-    {
-        list->addItem(mas[i].date + "    " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name + "    " + mas[i].id_user);
-    }
+        calendar->setDateTextFormat(mas[i].date,charformat);
+
+    for (unsigned int i = 0; i < mas.size(); i++)
+        list->addItem(mas[i].time + "    " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name + "    " + mas[i].id_user);
 
 }
 
@@ -156,9 +165,12 @@ void Interface::draw_calendar()
     scene->addWidget(calendar);
 
     calendar->setGeometry(0,0,scene->width(),scene->height());
-    //calendar->move(this->width() / 2 - calendar->width() / 2, this->height() / 2 - calendar->height() / 2);
 
     connect(calendar,SIGNAL(activated(QDate)),this,SLOT(calendarSelection()));
+
+
+    date.setDate(1900,01,01);
+    getRecords(true);
 
 }
 
@@ -208,11 +220,11 @@ void Interface::itemClicked(QListWidgetItem *item)
 void Interface::calendarSelection()
 {
 
-    fill_list();
+    date = calendar->selectedDate();
 
     calendar->hide();
 
-    getRecords();
+    getRecords(false);
 }
 
 void Interface::onbackButtonClick()
@@ -274,7 +286,9 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
                    mas[i].second_name = subtree.value("second_name").toString();
                    mas[i].first_name = subtree.value("first_name").toString();
                    mas[i].middle_name = subtree.value("middle_name").toString();
-                   mas[i].date = subtree.value("date").toString().mid(11);
+                   mas[i].time = subtree.value("date").toString().mid(11);
+                   mas[i].date = QDate::fromString(subtree.value("date").toString().left(10), "yyyy-MM-dd");
+                   qDebug() << mas[i].date;
                }
      }
     level = root.value("level").toInt();

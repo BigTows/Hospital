@@ -18,7 +18,7 @@ class Interface:  public QGraphicsView
 public:
     Interface(QWidget * parent = 0);
     void auth();
-    void getRecords();
+    void getRecords(bool from);
     void hide_auth_window();
     void fill_list();
     void draw_calendar();
@@ -40,6 +40,7 @@ private:
     QString token = "";
     QString str_getText = "";
     int level = 999;
+    QDate date;
 
     std::vector<MyUser> mas;
 
