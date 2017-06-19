@@ -2,12 +2,18 @@
 #include <QApplication>
 #include "interface.h"
 #include <QDebug>
+#include <windows.h> //переключение раскладки
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     Interface * window = new Interface;
-    //QLocale::system().language("English");
+
+    ActivateKeyboardLayout((HKL)1, KLF_REORDER);
+
+    window->setFixedSize(800,600);
+    window->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    window->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     window->show();
 
     return a.exec();

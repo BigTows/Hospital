@@ -29,7 +29,8 @@ SOURCES += main.cpp \
 
 HEADERS  += \
     interface.h \
-    network.h
+    network.h \
+    user.h
 
 FORMS    +=
 
