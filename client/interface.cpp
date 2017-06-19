@@ -15,6 +15,7 @@ Interface::Interface(QWidget *parent)
 
     scene = new QGraphicsScene;
     scene->setSceneRect(0,0,800,600);
+
     scene->setBackgroundBrush(QBrush(QImage(":/images/bg3.jpg")));
 
     editLogin = new QLineEdit;
@@ -87,6 +88,7 @@ Interface::Interface(QWidget *parent)
     editPassword->move(scene->width() / 2 - editPassword->width() / 2, 250);
     bt->move(scene->width() / 2 - bt->width() / 2, 300);
     backButton->move(list->x(), list->y() / 2 - backButton->height() / 2);
+    backButton->hide();
     label->move(bt->x() + bt->width() / 2 - label->width() / 2, bt->y() + bt->height() * 1.5);
 }
 
