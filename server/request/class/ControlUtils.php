@@ -61,6 +61,21 @@ class ControlUtils
         }
     }
 
+    public static function getHistory($idUser,$count = 5){
+        $sqlQuery = "SELECT * FROM `history_user` WHERE id_user=:id LIMIT :count";
+        global $DBConnect;
+        $stmt = $DBConnect->sendQuery($sqlQuery,[
+            "id"=>$idUser,
+            "count"=>$count],PDO::PARAM_INT
+        );
+        if ($DBConnect->hasError()){
+            echo json_encode($stmt->errorInfo());
+            return [];
+        }else{
+            return json_decode(json_encode($stmt->fetchAll(PDO::FETCH_OBJ)));
+        }
+    }
+
     public static function getListDoctors($token){
         if (AuthUtils::isAuth($token)){
 
