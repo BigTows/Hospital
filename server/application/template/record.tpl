@@ -50,8 +50,17 @@
     <script>
         var months = ["Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентебря","Октября","Ноября","Декабря"];
         var dateNow = new Date();
-        var datePicker=  new DatePicker(document.getElementById("date"));
-        datePicker.init();
+
+
+        function modal(id,timeStartWork,timeEndWork) {
+            let datePicker=  new DatePicker(document.getElementById("date"),document.getElementById("time-table"), {
+                id:id,
+                timeBegin:timeStartWork,
+                timeEnd:timeEndWork
+            });
+            datePicker.init();
+            $('#modal').modal('open');
+        }
 
 
         $(document).ready(function(){
@@ -59,7 +68,7 @@
 
 
         });
-        function modal(id,timeStartWork,timeEndWork){
+        /*function modal(id,timeStartWork,timeEndWork){
             var dateNow = new Date();
             for (var i = 1; i<=4;i++) {
                 $('#month-picker').append(new Option(i+"", i));
@@ -83,7 +92,7 @@
             }
             $('#time-table')
             $('#modal').modal('open');
-        }
+        }*/
     </script>
 {/capture}
 {include 'util/body.tpl'}

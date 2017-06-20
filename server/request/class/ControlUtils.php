@@ -99,4 +99,16 @@ class ControlUtils
         }
     }
 
+    public static function getFreeTimeInDay($idDoctor,$date){
+        global $DBConnect;
+        $stmt = $DBConnect->sendQuery("SELECT MINUTE(date) as m,SECOND (FROM `record` WHERE Date(:date)=Date(date) AND id_doctor = :id",
+            ["date"=>$date,
+                "id"=>$idDoctor]);
+        if ($DBConnect->hasError()) {
+            return null;
+        } else {
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }
+    }
+
 }
