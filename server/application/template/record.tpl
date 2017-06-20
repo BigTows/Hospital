@@ -32,11 +32,11 @@
                 <h4>Выбор времени</h4>
                 <br>
                 <div class="row">
-                <div id="date" class="input-field col s6">
+                <div id="date" class="col s4">
 
                 </div>
 
-                <div id="time-table">
+                <div id="time-table" class="col s8">
 
                 </div>
                 </div>

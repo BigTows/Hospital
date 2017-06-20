@@ -101,13 +101,28 @@ class ControlUtils
 
     public static function getFreeTimeInDay($idDoctor,$date){
         global $DBConnect;
-        $stmt = $DBConnect->sendQuery("SELECT MINUTE(date) as m,SECOND (FROM `record` WHERE Date(:date)=Date(date) AND id_doctor = :id",
+        $stmt = $DBConnect->sendQuery("SELECT HOUR (date) as h,MINUTE(date) as m FROM `record` WHERE Date(:date)=Date(date) AND id_doctor = :id",
             ["date"=>$date,
                 "id"=>$idDoctor]);
         if ($DBConnect->hasError()) {
             return null;
         } else {
             return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }
+    }
+
+    public static function recordUser($idUser,$idDoctor,$date){
+        global $DBConnect;
+        $st = $DBConnect->sendQuery("INSERT INTO `record`(`id_record`, `id_user`, `id_doctor`, `date`) VALUES (NULL,:idUser,:idDoc, DATE_FORMAT(:date,'%Y-%m-%d %H:%i'))",[
+            "idUser"=>$idUser,
+            "idDoc"=>$idDoctor,
+            "date"=>$date
+        ]);
+        if ($DBConnect->hasError()) {
+            echo json_encode($st->errorInfo());
+            return false;
+        } else {
+            return true;
         }
     }
 
