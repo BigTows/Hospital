@@ -1,5 +1,5 @@
 {capture name=content}
-<ul class="collapsible" data-collapsible="accordion">
+<ul class="collapsible" data-collapsible="expandable">
     {foreach key=date item=item from=$data.history}
         <li>
             <div class="collapsible-header"><i class="material-icons">schedule</i>Дата: {$date}</div>

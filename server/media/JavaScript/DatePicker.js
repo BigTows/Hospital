@@ -39,6 +39,7 @@ class DatePicker {
 
     showTimeTable(dateString) {
         let self = this;
+        this.timeTable.innerHTML="";
         this.time.dateString =dateString;
         $.ajax({
             url:'request/getFreeTime/index.php',

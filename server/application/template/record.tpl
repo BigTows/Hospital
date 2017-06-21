@@ -1,31 +1,46 @@
 {capture name=content}
     <script src="media/JavaScript/DatePicker.js"></script>
-    <div class="col s10 card-panel">
+    <div class="col l2">
 
+        <ul class="section table-of-contents">
+            {foreach item=record key=key from=$data.record}
+            <li><a href="#{$key}">{$key}</a></li>
+            {/foreach}
+        </ul>
+    </div>
+    <div class="col s10 card-panel">
         <div class="row">
-            {foreach item=record from=$data.record}
+            {foreach item=record key=key from=$data.record}
+            <div id="{$key}" class="section scrollspy">
+                <h4>{$key}</h4>
+            {foreach item=doctor from=$record}
                 <div class="col s12 m12 l12 xl6">
                     <div class="card horizontal">
                         <div class="card-image">
-                            <img src="{$record.photo}">
+                            <img src="{$doctor.photo}">
                         </div>
                         <div class="card-stacked">
-                            <div class="card-title">{$record.second_name} {$record.first_name|truncate:2:"."}{$record.middle_name|truncate:2:"."}</div>
+                            <div class="card-title">{$doctor.second_name} {$doctor.first_name|truncate:2:"."}{$doctor.middle_name|truncate:2:"."}</div>
                             <div class="card-content">
                                 <p>
-                                    Специальность: {$record.name}.
+                                    Специальность: {$doctor.name}.
                                     <br>
-                                    Время работы: {$record.start_time} - {$record.end_time}
+                                    Время работы: {$doctor.start_time} - {$doctor.end_time}
                                 </p>
                             </div>
                             <div class="card-action">
-                                <a href="#" class="btn waves-effect" onclick="modal({$record.id_doctor},'{$record.start_time}','{$record.end_time}')">Записаться</a>
+                                <a href="#" class="btn waves-effect" onclick="modal({$doctor.id_doctor},'{$doctor.start_time}','{$doctor.end_time}')">Записаться</a>
                             </div>
                         </div>
                     </div>
                 </div>
             {/foreach}
+            </div>
+                <div class="col s12"></div>
+            {/foreach}
         </div>
+
+
 
         <!-- Modal Structure -->
         <div id="dialog" class="modal">

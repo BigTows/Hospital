@@ -6,13 +6,22 @@ require $root . 'request/class/AuthUtils.php';
 require $root . 'request/class/ControlUtils.php';
 $smarty->template_dir = $root . 'application/template/';
 $data = [
+    "header" => [
+        "main" => [
+            "Главная" , "/hospital/server/"],
+        "doctors" => [
+            "Врачи" , ""],
+        "help" => [
+            "Помощь" , "help"]
+    ],
     "profile" => null
 ];
+
 
 $pages = [
     "main" => "index.tpl",
     "recover" => "recover.tpl",
-    "help"=>"help.tpl"
+    "help" => "help.tpl"
 ];
 
 $pagesWithAccess = [
@@ -33,10 +42,13 @@ function getPage($template)
     $userID = AuthUtils::isAuth(session_id());
     if (($pagesWithAccess[$template] ?? false) && $userID > 0) {
         getDataForPage($template, $userID);
+        $data["page"] = $template;
         $template = $pagesWithAccess[$template];
     } else if ($pages[$template] ?? false) {
+        $data["page"] = $template;
         $template = $pages[$template];
     } else {
+        $data["page"] = "main";
         $template = $pages["main"];
     }
     if ($userID > 0)
@@ -57,7 +69,7 @@ function getDataForPage($page, $idUser)
             $data["history"] = AuthUtils::getHistory($idUser);
             break;
         }
-        case "record":{
+        case "record": {
             $data["record"] = ControlUtils::getListDoctors(session_id());
         }
     }

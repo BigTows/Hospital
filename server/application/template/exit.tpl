@@ -8,10 +8,10 @@
         <div class="col s1 l1"></div>
         <div class="col s7 l7 card-panel">
             <div class="card-title">
+                <div class="card-content">
+                    <p>Вы успешно вышли, дождитесь перезагрузки страницы!</p>
+                </div>
                 Перезагрузка через, <a id="seconds">3</a> секунд
-            </div>
-            <div class="card-content">
-                <p>Вы успешно вышли, дождитесь перезагрузки страницы!</p>
             </div>
         </div>
         <script>

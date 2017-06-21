@@ -92,18 +92,28 @@ class ControlUtils
             if ($DBConnect->hasError()) {
                 return null;
             } else {
-                return $stmt->fetchAll();
+                $array = [];
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($rows as $row) {
+                    if (isset($array[$row['name']])) {
+                        array_push($array[$row['name']], $row);
+                    } else {
+                        $array[$row['name']][0] = $row;
+                    }
+                }
+                return $array;
             }
         } else {
             return null;
         }
     }
 
-    public static function getFreeTimeInDay($idDoctor,$date){
+    public static function getFreeTimeInDay($idDoctor, $date)
+    {
         global $DBConnect;
         $stmt = $DBConnect->sendQuery("SELECT HOUR (date) as h,MINUTE(date) as m FROM `record` WHERE Date(:date)=Date(date) AND id_doctor = :id",
-            ["date"=>$date,
-                "id"=>$idDoctor]);
+            ["date" => $date,
+                "id" => $idDoctor]);
         if ($DBConnect->hasError()) {
             return null;
         } else {
@@ -111,12 +121,13 @@ class ControlUtils
         }
     }
 
-    public static function recordUser($idUser,$idDoctor,$date){
+    public static function recordUser($idUser, $idDoctor, $date)
+    {
         global $DBConnect;
-        $st = $DBConnect->sendQuery("INSERT INTO `record`(`id_record`, `id_user`, `id_doctor`, `date`) VALUES (NULL,:idUser,:idDoc, DATE_FORMAT(:date,'%Y-%m-%d %H:%i'))",[
-            "idUser"=>$idUser,
-            "idDoc"=>$idDoctor,
-            "date"=>$date
+        $st = $DBConnect->sendQuery("INSERT INTO `record`(`id_record`, `id_user`, `id_doctor`, `date`) VALUES (NULL,:idUser,:idDoc, DATE_FORMAT(:date,'%Y-%m-%d %H:%i'))", [
+            "idUser" => $idUser,
+            "idDoc" => $idDoctor,
+            "date" => $date
         ]);
         if ($DBConnect->hasError()) {
             echo json_encode($st->errorInfo());
