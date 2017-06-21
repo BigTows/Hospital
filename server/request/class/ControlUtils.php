@@ -47,6 +47,37 @@ class ControlUtils
 
     }
 
+    public static function getRecordsUser($token, $period = false, $date = null): array
+    {
+        $doctorID = AuthUtils::getIDUserFromToken($token, 1);
+        if ($doctorID > 0) {
+            $sqlQuery = "SELECT * FROM " . Constant::RECORD_VIEW . " WHERE id_user=:id AND ";
+            global $DBConnect;
+            if ($date == null) {
+                $sqlQuery .= "date(date)>=date(NOW())";
+                $stmt = $DBConnect->sendQuery($sqlQuery, [
+                    "id" => $doctorID
+                ]);
+            } else {
+
+                $sqlQuery .= "date(date)";
+                if ($period) $sqlQuery .= ">";
+                $sqlQuery .= "=date(:date)";
+                $stmt = $DBConnect->sendQuery($sqlQuery, [
+                    "id" => $doctorID,
+                    "date" => $date
+                ]);
+            }
+            if ($DBConnect->hasError()) {
+                return array();
+            } else {
+                return $stmt->fetchAll(PDO::FETCH_OBJ);
+            }
+        }
+        return array();
+
+    }
+
     public static function addHistory($token, $idUser, $text): bool
     {
         $idDoctor = AuthUtils::getIDUserFromToken($token, 2);

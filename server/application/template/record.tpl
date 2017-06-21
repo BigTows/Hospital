@@ -37,6 +37,7 @@
             {/foreach}
             </div>
                 <div class="col s12"></div>
+                <br>
             {/foreach}
         </div>
 

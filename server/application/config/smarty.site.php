@@ -72,5 +72,8 @@ function getDataForPage($page, $idUser)
         case "record": {
             $data["record"] = ControlUtils::getListDoctors(session_id());
         }
+        case "profile":{
+            $data["records"] = json_decode(json_encode(ControlUtils::getRecordsUser(session_id(),true,null)),true);
+        }
     }
 }
