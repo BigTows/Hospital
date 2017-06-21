@@ -11,7 +11,8 @@ $data = [
 
 $pages = [
     "main" => "index.tpl",
-    "recover" => "recover.tpl"
+    "recover" => "recover.tpl",
+    "help"=>"help.tpl"
 ];
 
 $pagesWithAccess = [

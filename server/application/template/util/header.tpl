@@ -3,7 +3,7 @@
         <ul class="left hide-on-med-and-down">
             <li class="active"><a href="">Главная</a></li>
             <li><a href="">Врачи</a></li>
-            <li><a href="">Помощь</a></li>
+            <li><a href="help">Помощь</a></li>
         </ul>
 
         <ul class="right input-field">

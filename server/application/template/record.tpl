@@ -26,6 +26,18 @@
                 </div>
             {/foreach}
         </div>
+
+        <!-- Modal Structure -->
+        <div id="dialog" class="modal">
+            <div class="modal-content">
+                <h4>Успех!</h4>
+                <p id="dialog-text"></p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Хорошо</a>
+            </div>
+        </div>
+
         <!-- Modal Structure -->
         <div id="modal" class="modal bottom-sheet">
             <div class="modal-content">

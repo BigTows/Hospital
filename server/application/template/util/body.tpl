@@ -56,7 +56,7 @@
                             </span>
                         </a>
                         <a href="record" class="collection-item">
-                            Записи к врачу
+                            Записаться к врачу
                             <span class="badge">
                                 <i class="material-icons">mode_edit</i>
                             </span>

@@ -107,6 +107,9 @@ class DatePicker {
             success:(function (msg){
                 console.log(msg);
                 $('#modal').modal('close');
+                $('#dialog').modal('open');
+                $('#dialog-text').text("Вы успешно записались на прием к "+date);
+
             })
 
         })
