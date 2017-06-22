@@ -1,6 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
+#include <QPixmap>
 #include <QString>
 
 struct MyUser
@@ -15,6 +16,7 @@ struct MyUser
     QString phone;
     QString photo;
     QString sex;
+    QPixmap pixPhoto;
 };
 
 

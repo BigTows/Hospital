@@ -78,8 +78,10 @@ Interface::Interface(QWidget *parent)
         mas_label << new QLabel();
         mas_label[i]->setStyleSheet("font: 15px;"
                                     "background-color: rgba(173,216,230,80%);"
-                                    "margin-left: 5px");
+                                    "padding-left: 5px");
     }
+    mas_label[0]->setStyleSheet("background-color: rgba(173,216,230,80%);"
+                                "padding-left: 100px");
 
     layout = new QVBoxLayout();
 
@@ -93,6 +95,7 @@ Interface::Interface(QWidget *parent)
     frame->resize(330, 500);
     frame->setStyleSheet("background-color: rgba(0, 0, 0, 30%)");
     frame->setLayout(layout);
+    frame->hide();
 
     timer = new QTimer;
     timer->setInterval(8000);
@@ -222,6 +225,7 @@ void Interface::hideListfucn()
 {
     list->hide();
     backButton->hide();
+    frame->hide();
 }
 
 void Interface::loadPicture(QString photo)
@@ -239,6 +243,7 @@ void Interface::loadPicture(QString photo)
 void Interface::getUser()
 {
     postData.clear();
+    SelectedUser = MyUser();
 
     request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getUser/"));
 
@@ -264,6 +269,20 @@ void Interface::updateCalendar()
         calendar->setDateTextFormat(mas[i].date,charformat);
 }
 
+void Interface::fillProfile()
+{
+    for (unsigned int i = 0; i<7; i++)
+         mas_label[i]->show();
+
+    mas_label[0]->setPixmap(SelectedUser.pixPhoto);
+    mas_label[1]->setText(SelectedUser.second_name + " " + SelectedUser.first_name + " " + SelectedUser.middle_name);
+    mas_label[2]->setText(SelectedUser.id_user);
+    mas_label[3]->setText(SelectedUser.email);
+    mas_label[4]->setText(SelectedUser.phone);
+    mas_label[5]->setText((SelectedUser.sex == "1") ? "М" : "Ж");
+    mas_label[6]->setText(SelectedUser.date.toString("yyyy-MM-dd"));
+}
+
 void Interface::itemDoubleClicked(QListWidgetItem *item)
 {
     str_getText = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
@@ -285,6 +304,7 @@ void Interface::calendarSelection()
     date = calendar->selectedDate();
 
     calendar->hide();
+    frame->show();
 
     getRecords(false, date);
     can_update = false;
@@ -376,18 +396,9 @@ void Interface::onloadPictureResult(QNetworkReply *reply)
        {
            QByteArray data = reply->readAll();
            QImage image = QImage::fromData(data).scaled(100, 100, Qt::KeepAspectRatio);
-
-           for (unsigned int i = 0; i<7; i++)
-                mas_label[i]->show();
-
-           mas_label[0]->setPixmap(QPixmap::fromImage(image));
-           mas_label[1]->setText(SelectedUser.second_name + " " + SelectedUser.first_name + " " + SelectedUser.middle_name);
-           mas_label[2]->setText(SelectedUser.id_user);
-           mas_label[3]->setText(SelectedUser.email);
-           mas_label[4]->setText(SelectedUser.phone);
-           mas_label[5]->setText(SelectedUser.sex);
-           mas_label[6]->setText(SelectedUser.date.toString());
-    }
+           SelectedUser.pixPhoto = QPixmap::fromImage(QImage::fromData(data).scaled(100, 100, Qt::KeepAspectRatio));
+       }
+    fillProfile();
 }
 
 void Interface::ongetUserResult(QNetworkReply *reply)
@@ -395,9 +406,6 @@ void Interface::ongetUserResult(QNetworkReply *reply)
     QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
     QJsonObject root = document.object();
     QJsonObject jv = root.value("data").toObject();
-
-    //qDebug() << root;
-
 
     SelectedUser.id_user = jv.value("polis").toString();
     SelectedUser.second_name = jv.value("second_name").toString();

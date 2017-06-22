@@ -29,6 +29,7 @@ public:
     void loadPicture(QString photo);
     void getUser();
     void updateCalendar();
+    void fillProfile();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
