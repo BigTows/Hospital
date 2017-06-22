@@ -18,8 +18,10 @@ Interface::Interface(QWidget *parent)
     scene = new QGraphicsScene;
     scene->setSceneRect(0,0,800,600);
 
-    const QUrl url =QDir::currentPath() + "/bg3.jpg";
+    const QUrl url = QDir::currentPath() + "/bg3.jpg";
     QString test = url.path();
+
+    test = ":/images/bg3.jpg"; //only for coding
 
     scene->setBackgroundBrush(QBrush(QImage(test)));
 
