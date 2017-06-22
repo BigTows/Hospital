@@ -5,13 +5,13 @@
 {include 'util/header.tpl'}
 <main>
     <div class="row">
-        <div class="col s1 l1"></div>
-        <div class="col s7 l7" style="margin-top: 20px">
+        <div class="col s0 l1"></div>
+        <div class="col s12 l7" style="margin-top: 20px">
             {if $smarty.capture.content ne ''}
                 {$smarty.capture.content}
             {/if}
         </div>
-        <div class="col s3 l3" style="margin-top: 20px;">
+        <div class="col s12 l3" style="margin-top: 20px;">
             <div class="auth-panel card-panel">
                 {if $data.profile === NULL}
                 <span class="card-title">Авторизация</span>
@@ -37,10 +37,10 @@
                         </div>
                         <div class="row">
                             <div class="col s12 l7">
-                                <a href="">Вы здесь впервые?</a>
+                                <a href="recover">Вы здесь впервые?</a>
                             </div>
                             <div class="col s12 l5">
-                                <a href="">Забыли пароль?</a>
+                                <a href="recover">Забыли пароль?</a>
                             </div>
                         </div>
                     </form>

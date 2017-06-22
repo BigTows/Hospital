@@ -1,5 +1,5 @@
 {capture name=content}
-    <div class="col s10 card-panel">
+    <div class="col s12 l10 card-panel">
         <div class="card-title">
             <div class="row">
                 <div class="col s12 center-align">

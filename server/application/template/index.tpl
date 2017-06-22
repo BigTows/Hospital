@@ -1,6 +1,7 @@
 {capture name=content}
         <div class="col s10 card-panel">
-            <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Drop Me!</a>
+            <div class="card-title center"><h3>Добро пожаловать</h3>
+                <h4>на сайт поликлиники</h4></div>
         </div>
 {/capture}
 {include 'util/body.tpl'}
