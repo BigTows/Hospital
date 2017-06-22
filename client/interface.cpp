@@ -18,7 +18,10 @@ Interface::Interface(QWidget *parent)
     scene = new QGraphicsScene;
     scene->setSceneRect(0,0,800,600);
 
-    scene->setBackgroundBrush(QBrush(QImage(":/images/bg3.jpg")));
+    const QUrl url =QDir::currentPath() + "/bg3.jpg";
+    QString test = url.path();
+
+    scene->setBackgroundBrush(QBrush(QImage(test)));
 
     editLogin = new QLineEdit;
     editLogin->setStyleSheet("border: 1px solid lightgreen;"
