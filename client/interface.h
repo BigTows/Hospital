@@ -11,6 +11,8 @@
 #include <QCalendarWidget>
 #include <QLabel>
 #include "user.h"
+#include <QFrame>
+#include <QVBoxLayout>
 
 class Interface:  public QGraphicsView
 {
@@ -18,13 +20,15 @@ class Interface:  public QGraphicsView
 public:
     Interface(QWidget * parent = 0);
     void auth();
-    void getRecords(bool from);
+    void getRecords(bool from, QDate date);
     void hide_auth_window();
     void fill_list();
     void draw_calendar();
     void addHistory();
     void hideListfucn();
-    void loadPicture();
+    void loadPicture(QString photo);
+    void getUser();
+    void updateCalendar();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
@@ -36,13 +40,17 @@ private:
     QPushButton * showButton;
     QPushButton * backButton;
     QLabel * label;
+    QFrame * frame;
+    QTimer * timer;
+    QVBoxLayout * layout;
 
     QString token = "";
     QString str_getText = "";
-    int level = 999;
-    QDate date;
+    bool can_update = true;
 
     std::vector<MyUser> mas;
+    QList< QLabel*> mas_label;
+    MyUser SelectedUser;
 
     QByteArray postData;
     QNetworkRequest request;
@@ -50,10 +58,13 @@ private slots:
     void onAuthResult(QNetworkReply *reply);
     void ongetRecordsResult(QNetworkReply *reply);
     void onloadPictureResult(QNetworkReply *reply);
+    void ongetUserResult(QNetworkReply *reply);
     void on_EnterButton_Clicked();
+    void itemDoubleClicked(QListWidgetItem* item);
     void itemClicked(QListWidgetItem* item);
     void calendarSelection();
     void onbackButtonClick();
+    void onTimerTimeout();
 };
 
 #endif // INTERFACE_H

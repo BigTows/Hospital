@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QList>
 #include <QInputDialog>
+#include <QVBoxLayout>
+#include <QPixmap>
 
 Interface::Interface(QWidget *parent)
 {
@@ -56,10 +58,14 @@ Interface::Interface(QWidget *parent)
     list = new QListWidget;
     list->setStyleSheet("background-color: lightblue;"
                         "font: 15px;");
-    list->resize(700,500);
-    list->move(50,50);
+    list->resize(440,500);
+    list->move(10,50);
 
-    connect(list,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(itemClicked(QListWidgetItem*)));
+    connect(list,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(itemDoubleClicked(QListWidgetItem*)));
+    connect(list,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(itemClicked(QListWidgetItem*)));
+
+
+
 
     label = new QLabel;
     label->setText("Неверный логин или пароль");
@@ -67,12 +73,38 @@ Interface::Interface(QWidget *parent)
                          "background:transparent;");
     label->hide();
 
+    for (unsigned int i = 0; i < 7; i++)
+    {
+        mas_label << new QLabel();
+        mas_label[i]->setStyleSheet("font: 15px;"
+                                    "background-color: rgba(173,216,230,80%);"
+                                    "margin-left: 5px");
+    }
+
+    layout = new QVBoxLayout();
+
+    for (unsigned int i = 0; i<7; i++)
+    {
+         layout->addWidget(mas_label[i]);
+         mas_label[i]->hide();
+    }
+
+    frame = new QFrame;
+    frame->resize(330, 500);
+    frame->setStyleSheet("background-color: rgba(0, 0, 0, 30%)");
+    frame->setLayout(layout);
+
+    timer = new QTimer;
+    timer->setInterval(8000);
+    connect(timer,SIGNAL(timeout()),this,SLOT(onTimerTimeout()));
+
     scene->addWidget(editLogin);
     scene->addWidget(editPassword);
     scene->addWidget(bt);
     scene->addWidget(backButton);
-    scene->addWidget(list);
     scene->addWidget(label);
+    scene->addWidget(list);
+    scene->addWidget(frame);
 
     hideListfucn();
 
@@ -90,6 +122,7 @@ Interface::Interface(QWidget *parent)
     backButton->move(list->x(), list->y() / 2 - backButton->height() / 2);
     backButton->hide();
     label->move(bt->x() + bt->width() / 2 - label->width() / 2, bt->y() + bt->height() * 1.5);
+    frame->move(list->x() + list->width() + 10, list->y());
 }
 
 void Interface::auth()
@@ -109,36 +142,34 @@ void Interface::auth()
     net->post(request, postData);
 }
 
-void Interface::getRecords(bool from)
+void Interface::getRecords(bool from, QDate date)
 {
-    mas.clear();
-    postData.clear();
-
-    request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
-
-    postData.append("token=" + token + "&");
-    if (from)
+    if (can_update)
     {
-    postData.append("date=" + date.toString("yyyy-MM-dd") + "&");
-    postData.append("period=true");
+        mas.clear();
+        postData.clear();
+
+        request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getRecords/"));
+
+        postData.append("token=" + token + "&");
+        postData.append("date=" + date.toString("yyyy-MM-dd") + "&");
+        if (from)
+            postData.append("period=true");
+
+        qDebug() << postData;
+
+        net = new QNetworkAccessManager();
+
+        QObject::connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(ongetRecordsResult(QNetworkReply*)));
+
+        net->post(request, postData);
     }
-    else
-        postData.append("date=" + date.toString("yyyy-MM-dd"));
-    qDebug() << date.toString();
-
-
-    net = new QNetworkAccessManager();
-
-    QObject::connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(ongetRecordsResult(QNetworkReply*)));
-
-    net->post(request, postData);
 }
 
 
 
 void Interface::hide_auth_window()
 {
-    level = 999;
     bt->hide();
     editLogin->hide();
     editPassword->hide();
@@ -151,14 +182,10 @@ void Interface::fill_list()
     list->clear();
     backButton->show();
 
-    QTextCharFormat charformat;
-    charformat.setBackground(QBrush(QColor(0, 230, 94, 100)));
     for (unsigned int i = 0; i < mas.size(); i++)
-        calendar->setDateTextFormat(mas[i].date,charformat);
+        list->addItem(mas[i].time + "    " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name);
 
-    for (unsigned int i = 0; i < mas.size(); i++)
-        list->addItem(mas[i].time + "    " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name + "    " + mas[i].id_user);
-
+    updateCalendar();
 }
 
 void Interface::draw_calendar()
@@ -170,9 +197,9 @@ void Interface::draw_calendar()
 
     connect(calendar,SIGNAL(activated(QDate)),this,SLOT(calendarSelection()));
 
-
+    QDate date;
     date.setDate(1900,01,01);
-    getRecords(true);
+    getRecords(true, date);
 
 }
 
@@ -185,7 +212,6 @@ void Interface::addHistory()
     postData.append("token=" + token + "&");
     postData.append("id_user=" + mas[list->currentRow()].id_user + "&");
     postData.append("text=" + str_getText);
-    qDebug() << str_getText;
 
     net = new QNetworkAccessManager();
 
@@ -198,9 +224,10 @@ void Interface::hideListfucn()
     backButton->hide();
 }
 
-void Interface::loadPicture()
+void Interface::loadPicture(QString photo)
 {
-    request.setUrl(QUrl("https://pp.userapi.com/c620126/v620126184/15af5/a171MPR6ArM.jpg"));
+    request.setUrl(QUrl(photo));
+    qDebug() << photo;
 
     net = new QNetworkAccessManager();
 
@@ -209,7 +236,35 @@ void Interface::loadPicture()
     net->get(request);
 }
 
-void Interface::itemClicked(QListWidgetItem *item)
+void Interface::getUser()
+{
+    postData.clear();
+
+    request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getUser/"));
+
+    postData.append("token=" + token + "&");
+    postData.append("id_user=" + mas[list->currentRow()].id_user);
+    qDebug() << postData;
+
+    net = new QNetworkAccessManager();
+
+    connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(ongetUserResult(QNetworkReply*)));
+
+    net->post(request, postData);
+}
+
+void Interface::updateCalendar()
+{
+    calendar->setDateTextFormat(QDate() , QTextCharFormat());
+
+    QTextCharFormat charformat;
+    charformat.setBackground(QBrush(QColor(0, 230, 94, 100)));
+
+    for (unsigned int i = 0; i < mas.size(); i++)
+        calendar->setDateTextFormat(mas[i].date,charformat);
+}
+
+void Interface::itemDoubleClicked(QListWidgetItem *item)
 {
     str_getText = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
     if (str_getText != "")
@@ -219,20 +274,38 @@ void Interface::itemClicked(QListWidgetItem *item)
 
 }
 
+void Interface::itemClicked(QListWidgetItem *item)
+{
+    getUser();
+}
+
 void Interface::calendarSelection()
 {
-
+    QDate date;
     date = calendar->selectedDate();
 
     calendar->hide();
 
-    getRecords(false);
+    getRecords(false, date);
+    can_update = false;
 }
 
 void Interface::onbackButtonClick()
 {
     hideListfucn();
+    can_update = true;
+
+    for (unsigned int i = 0; i<7; i++)
+         mas_label[i]->hide();
+    onTimerTimeout();
     calendar->show();
+}
+
+void Interface::onTimerTimeout()
+{
+    QDate date;
+    date.setDate(1900,01,01);
+    getRecords(true, date);
 }
 
 void Interface::onAuthResult(QNetworkReply *reply)
@@ -244,23 +317,23 @@ void Interface::onAuthResult(QNetworkReply *reply)
 
            QJsonObject root = document.object();
 
+           //qDebug() << root;
+
            QJsonObject jv = root.value("data").toObject();
 
            token = jv.value("token").toString();
 
-           level = root.value("level").toInt();
 
-    }
 
-    if (level == 0)
-    {
-        hide_auth_window();
-        draw_calendar();
-    }
-    else
-    {
-        label->show();
-        level = 999;
+        if (root.value("level").toInt() == 0)
+        {
+            hide_auth_window();
+            draw_calendar();
+            timer->start();
+        }
+        else
+            label->show();
+
     }
 
     reply->deleteLater();
@@ -272,8 +345,6 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
     QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
     QJsonObject root = document.object();
     QJsonValue jv = root.value("data");
-
-    qDebug() << root;
 
     if(jv.isArray())
     {
@@ -290,15 +361,13 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
                    mas[i].middle_name = subtree.value("middle_name").toString();
                    mas[i].time = subtree.value("date").toString().mid(11);
                    mas[i].date = QDate::fromString(subtree.value("date").toString().left(10), "yyyy-MM-dd");
-                   qDebug() << mas[i].date;
+                   //qDebug() << mas[i].date;
                }
      }
-    level = root.value("level").toInt();
 
-    if (level == 0)
-    {
+    if (root.value("level").toInt() == 0)
         fill_list();
-    }
+
 }
 
 void Interface::onloadPictureResult(QNetworkReply *reply)
@@ -306,9 +375,45 @@ void Interface::onloadPictureResult(QNetworkReply *reply)
     if (reply->error() == QNetworkReply::NoError)
        {
            QByteArray data = reply->readAll();
-           QImage image = QImage::fromData(data);
-           backButton->setIcon(QIcon(QPixmap::fromImage(image)));
-       }
+           QImage image = QImage::fromData(data).scaled(100, 100, Qt::KeepAspectRatio);
+
+           for (unsigned int i = 0; i<7; i++)
+                mas_label[i]->show();
+
+           mas_label[0]->setPixmap(QPixmap::fromImage(image));
+           mas_label[1]->setText(SelectedUser.second_name + " " + SelectedUser.first_name + " " + SelectedUser.middle_name);
+           mas_label[2]->setText(SelectedUser.id_user);
+           mas_label[3]->setText(SelectedUser.email);
+           mas_label[4]->setText(SelectedUser.phone);
+           mas_label[5]->setText(SelectedUser.sex);
+           mas_label[6]->setText(SelectedUser.date.toString());
+    }
+}
+
+void Interface::ongetUserResult(QNetworkReply *reply)
+{
+    QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+    QJsonObject root = document.object();
+    QJsonObject jv = root.value("data").toObject();
+
+    //qDebug() << root;
+
+
+    SelectedUser.id_user = jv.value("polis").toString();
+    SelectedUser.second_name = jv.value("second_name").toString();
+    SelectedUser.first_name = jv.value("first_name").toString();
+    SelectedUser.middle_name = jv.value("middle_name").toString();
+    SelectedUser.time = jv.value("date").toString().mid(11);
+    SelectedUser.date = QDate::fromString(jv.value("date").toString().left(10), "yyyy-MM-dd");
+    SelectedUser.email = jv.value("email").toString();
+    SelectedUser.phone = jv.value("phone").toString();
+    SelectedUser.photo = jv.value("photo").toString();
+    SelectedUser.sex = jv.value("sex").toString();
+
+    if (jv.value("level").toInt() == 0)
+    {
+        loadPicture(SelectedUser.photo);
+    }
 }
 
 void Interface::on_EnterButton_Clicked()

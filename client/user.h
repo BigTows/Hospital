@@ -11,6 +11,10 @@ struct MyUser
     QString middle_name;
     QDate date;
     QString time;
+    QString email;
+    QString phone;
+    QString photo;
+    QString sex;
 };
 
 
