@@ -1,7 +1,9 @@
 {capture name=content}
     <div class="col s10 card-panel">
         <form id="recover">
+            <h3>Восстановления пароля</h3>
             <div class="row">
+
                 <div class="input-field col s12 l12">
                     <i class="material-icons prefix" style="margin-top: 12px">person</i>
                     <input id="recover-login" type="text" class="validate">
@@ -10,7 +12,7 @@
             </div>
             <div class="row">
                 <div class="col s12 center">
-                    <input type="submit" class="btn" value="Войти">
+                    <input type="submit" class="btn" value="Подтвердить">
                 </div>
             </div>
         </form>
@@ -44,6 +46,7 @@
                     if (JSON.parse(msg).level > 0) {
                         Materialize.toast('Проверьте данные для входа', 3000);
                     } else {
+                        Materialize.toast('Код отправлен на ваш мобильный телефон', 3000);
                        document.getElementById("recover-code").style.visibility="visible";
                        document.getElementById("recover").remove();
                         $('#recover-code-form').show();

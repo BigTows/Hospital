@@ -1,6 +1,6 @@
 {capture name=content}
     <script src="media/JavaScript/DatePicker.js"></script>
-    <div class="col l2">
+    <div class="col l2 card-panel">
 
         <ul class="section table-of-contents">
             {foreach item=record key=key from=$data.record}
@@ -17,7 +17,7 @@
                 <div class="col s12 m12 l12 xl6">
                     <div class="card horizontal">
                         <div class="card-image">
-                            <img src="{$doctor.photo}">
+                            <img height="200px" src="{$doctor.photo}">
                         </div>
                         <div class="card-stacked">
                             <div class="card-title">{$doctor.second_name} {$doctor.first_name|truncate:2:"."}{$doctor.middle_name|truncate:2:"."}</div>
