@@ -311,6 +311,8 @@ void Interface::calendarSelection()
     calendar->hide();
     frame->show();
 
+    list->clear();
+
     getRecords(false, date);
     can_update = false;
 }
@@ -322,6 +324,8 @@ void Interface::onbackButtonClick()
 
     for (unsigned int i = 0; i<7; i++)
          mas_label[i]->hide();
+
+    timer->setInterval(8000);
     onTimerTimeout();
     calendar->show();
 }
