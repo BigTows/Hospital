@@ -68,7 +68,6 @@ Interface::Interface(QWidget *parent)
 
     connect(list,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(itemDoubleClicked(QListWidgetItem*)));
     connect(list,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(itemClicked(QListWidgetItem*)));
-    connect(list,SIGNAL(currentRowChanged(int)),this,SLOT(itemClicked(QListWidgetItem*)));
 
     //kek
 
