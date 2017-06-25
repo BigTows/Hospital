@@ -21,7 +21,7 @@ Interface::Interface(QWidget *parent)
     const QUrl url = QDir::currentPath() + "/bg3.jpg";
     QString test = url.path();
 
-    test = ":/images/bg3.jpg"; //only for coding
+    //test = ":/images/bg3.jpg"; //only for coding
 
     scene->setBackgroundBrush(QBrush(QImage(test)));
 
