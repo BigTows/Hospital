@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Interface_t {
-    QByteArrayData data[16];
-    char stringdata0[226];
+    QByteArrayData data[19];
+    char stringdata0[271];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,22 +39,27 @@ QT_MOC_LITERAL(4, 39, 5), // "reply"
 QT_MOC_LITERAL(5, 45, 18), // "ongetRecordsResult"
 QT_MOC_LITERAL(6, 64, 19), // "onloadPictureResult"
 QT_MOC_LITERAL(7, 84, 15), // "ongetUserResult"
-QT_MOC_LITERAL(8, 100, 22), // "on_EnterButton_Clicked"
-QT_MOC_LITERAL(9, 123, 17), // "itemDoubleClicked"
-QT_MOC_LITERAL(10, 141, 16), // "QListWidgetItem*"
-QT_MOC_LITERAL(11, 158, 4), // "item"
-QT_MOC_LITERAL(12, 163, 11), // "itemClicked"
-QT_MOC_LITERAL(13, 175, 17), // "calendarSelection"
-QT_MOC_LITERAL(14, 193, 17), // "onbackButtonClick"
-QT_MOC_LITERAL(15, 211, 14) // "onTimerTimeout"
+QT_MOC_LITERAL(8, 100, 18), // "ongetHistoryResult"
+QT_MOC_LITERAL(9, 119, 22), // "on_EnterButton_Clicked"
+QT_MOC_LITERAL(10, 142, 17), // "itemDoubleClicked"
+QT_MOC_LITERAL(11, 160, 16), // "QListWidgetItem*"
+QT_MOC_LITERAL(12, 177, 4), // "item"
+QT_MOC_LITERAL(13, 182, 11), // "itemClicked"
+QT_MOC_LITERAL(14, 194, 17), // "calendarSelection"
+QT_MOC_LITERAL(15, 212, 17), // "onbackButtonClick"
+QT_MOC_LITERAL(16, 230, 14), // "onTimerTimeout"
+QT_MOC_LITERAL(17, 245, 20), // "onhistoryButtonClick"
+QT_MOC_LITERAL(18, 266, 4) // "test"
 
     },
     "Interface\0onAuthResult\0\0QNetworkReply*\0"
     "reply\0ongetRecordsResult\0onloadPictureResult\0"
-    "ongetUserResult\0on_EnterButton_Clicked\0"
-    "itemDoubleClicked\0QListWidgetItem*\0"
-    "item\0itemClicked\0calendarSelection\0"
-    "onbackButtonClick\0onTimerTimeout"
+    "ongetUserResult\0ongetHistoryResult\0"
+    "on_EnterButton_Clicked\0itemDoubleClicked\0"
+    "QListWidgetItem*\0item\0itemClicked\0"
+    "calendarSelection\0onbackButtonClick\0"
+    "onTimerTimeout\0onhistoryButtonClick\0"
+    "test"
 };
 #undef QT_MOC_LITERAL
 
@@ -64,7 +69,7 @@ static const uint qt_meta_data_Interface[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -72,25 +77,31 @@ static const uint qt_meta_data_Interface[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   64,    2, 0x08 /* Private */,
-       5,    1,   67,    2, 0x08 /* Private */,
-       6,    1,   70,    2, 0x08 /* Private */,
-       7,    1,   73,    2, 0x08 /* Private */,
-       8,    0,   76,    2, 0x08 /* Private */,
-       9,    1,   77,    2, 0x08 /* Private */,
-      12,    1,   80,    2, 0x08 /* Private */,
-      13,    0,   83,    2, 0x08 /* Private */,
-      14,    0,   84,    2, 0x08 /* Private */,
-      15,    0,   85,    2, 0x08 /* Private */,
+       1,    1,   79,    2, 0x08 /* Private */,
+       5,    1,   82,    2, 0x08 /* Private */,
+       6,    1,   85,    2, 0x08 /* Private */,
+       7,    1,   88,    2, 0x08 /* Private */,
+       8,    1,   91,    2, 0x08 /* Private */,
+       9,    0,   94,    2, 0x08 /* Private */,
+      10,    1,   95,    2, 0x08 /* Private */,
+      13,    1,   98,    2, 0x08 /* Private */,
+      14,    0,  101,    2, 0x08 /* Private */,
+      15,    0,  102,    2, 0x08 /* Private */,
+      16,    0,  103,    2, 0x08 /* Private */,
+      17,    0,  104,    2, 0x08 /* Private */,
+      18,    0,  105,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void, 0x80000000 | 3,    4,
+    QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 10,   11,
-    QMetaType::Void, 0x80000000 | 10,   11,
+    QMetaType::Void, 0x80000000 | 11,   12,
+    QMetaType::Void, 0x80000000 | 11,   12,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -108,12 +119,15 @@ void Interface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 1: _t->ongetRecordsResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         case 2: _t->onloadPictureResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         case 3: _t->ongetUserResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
-        case 4: _t->on_EnterButton_Clicked(); break;
-        case 5: _t->itemDoubleClicked((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
-        case 6: _t->itemClicked((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
-        case 7: _t->calendarSelection(); break;
-        case 8: _t->onbackButtonClick(); break;
-        case 9: _t->onTimerTimeout(); break;
+        case 4: _t->ongetHistoryResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
+        case 5: _t->on_EnterButton_Clicked(); break;
+        case 6: _t->itemDoubleClicked((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
+        case 7: _t->itemClicked((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
+        case 8: _t->calendarSelection(); break;
+        case 9: _t->onbackButtonClick(); break;
+        case 10: _t->onTimerTimeout(); break;
+        case 11: _t->onhistoryButtonClick(); break;
+        case 12: _t->test(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -141,6 +155,13 @@ void Interface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             }
             break;
         case 3:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QNetworkReply* >(); break;
+            }
+            break;
+        case 4:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -176,13 +197,13 @@ int Interface::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 13;
     }
     return _id;
 }

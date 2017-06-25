@@ -11,6 +11,7 @@
 #include <QInputDialog>
 #include <QVBoxLayout>
 #include <QPixmap>
+#include "historywindow.h"
 
 Interface::Interface(QWidget *parent)
 {
@@ -94,6 +95,14 @@ Interface::Interface(QWidget *parent)
          mas_label[i]->hide();
     }
 
+    historyButton = new QPushButton("История назначений", nullptr);
+    historyButton->setMinimumHeight(25);
+    historyButton->setStyleSheet("font: 18px;"
+                       "background-color: rgba(173,216,230,100%);");
+    historyButton->hide();
+
+    connect(historyButton,SIGNAL(clicked(bool)),this,SLOT(onhistoryButtonClick()));
+
     frame = new QFrame;
     frame->resize(330, 500);
     frame->setStyleSheet("background-color: rgba(0, 0, 0, 30%)");
@@ -103,6 +112,8 @@ Interface::Interface(QWidget *parent)
     timer = new QTimer;
     timer->setInterval(8000);
     connect(timer,SIGNAL(timeout()),this,SLOT(onTimerTimeout()));
+
+    layout->addWidget(historyButton);
 
     scene->addWidget(editLogin);
     scene->addWidget(editPassword);
@@ -288,6 +299,7 @@ void Interface::fillProfile()
 {
     for (unsigned int i = 0; i<7; i++)
          mas_label[i]->show();
+    historyButton->show();
 
     mas_label[0]->setPixmap(SelectedUser.pixPhoto);
     mas_label[1]->setText(SelectedUser.second_name + " " + SelectedUser.first_name + " " + SelectedUser.middle_name);
@@ -309,6 +321,24 @@ void Interface::blink()
     info.uCount = 3;
 
     FlashWindowEx(&info);
+}
+
+void Interface::getHistory()
+{
+    postData.clear();
+    SelectedUser = MyUser();
+
+    request.setUrl(QUrl("http://194.87.98.46/hospital/server/request/getHistory/"));
+
+    postData.append("token=" + token + "&");
+    postData.append("id_user=" + mas[list->currentRow()].id_user);
+
+    net = new QNetworkAccessManager();
+
+    connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(ongetHistoryResult(QNetworkReply*)));
+    connect(net, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
+
+    net->post(request, postData);
 }
 
 void Interface::itemDoubleClicked(QListWidgetItem *item)
@@ -346,6 +376,7 @@ void Interface::onbackButtonClick()
 
     for (unsigned int i = 0; i<7; i++)
          mas_label[i]->hide();
+    historyButton->hide();
 
     timer->setInterval(8000);
     timer->start();
@@ -357,6 +388,23 @@ void Interface::onbackButtonClick()
 void Interface::onTimerTimeout()
 {
     updateCalendar();
+}
+
+void Interface::onhistoryButtonClick()
+{
+    massive.clear();
+    getHistory();
+    loop.exec();
+    historyWindow * secwin = new historyWindow(0,massive);
+    secwin->setFixedSize(400,600);
+    //secwin->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //secwin->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    secwin->exec();
+}
+
+void Interface::test()
+{
+    this->setEnabled(true);
 }
 
 void Interface::onAuthResult(QNetworkReply *reply)
@@ -453,6 +501,28 @@ void Interface::ongetUserResult(QNetworkReply *reply)
     {
         loadPicture(SelectedUser.photo);
     }
+}
+
+void Interface::ongetHistoryResult(QNetworkReply *reply)
+{
+    QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+    QJsonObject root = document.object();
+    QJsonValue jv = root.value("data");
+
+    if(jv.isArray())
+    {
+        QJsonArray ja = jv.toArray();
+
+            for(int i = 0; i < ja.count(); i++)
+               {
+                   QJsonObject subtree = ja.at(i).toObject();
+
+                   massive.insert(massive.begin(), subtree.value("text").toString());
+               }
+     }
+
+    if (root.value("level").toInt() == 0)
+        qDebug() << "okey";
 }
 
 void Interface::on_EnterButton_Clicked()

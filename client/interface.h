@@ -32,6 +32,7 @@ public:
     void updateCalendar();
     void fillProfile();
     void blink();
+    void getHistory();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
@@ -46,6 +47,11 @@ private:
     QFrame * frame;
     QTimer * timer;
     QVBoxLayout * layout;
+    QPushButton * historyButton;
+
+
+    std::vector<QString> massive;
+
 
     QString token = "";
     QString str_getText = "";
@@ -62,12 +68,16 @@ private slots:
     void ongetRecordsResult(QNetworkReply *reply);
     void onloadPictureResult(QNetworkReply *reply);
     void ongetUserResult(QNetworkReply *reply);
+    void ongetHistoryResult(QNetworkReply *reply);
     void on_EnterButton_Clicked();
     void itemDoubleClicked(QListWidgetItem* item);
     void itemClicked(QListWidgetItem* item);
     void calendarSelection();
     void onbackButtonClick();
     void onTimerTimeout();
+    void onhistoryButtonClick();
+
+    void test();
 };
 
 #endif // INTERFACE_H

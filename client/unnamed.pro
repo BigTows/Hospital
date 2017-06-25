@@ -25,12 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     interface.cpp \
-    network.cpp
+    network.cpp \
+    historywindow.cpp
 
 HEADERS  += \
     interface.h \
     network.h \
-    user.h
+    user.h \
+    historywindow.h
 
 FORMS    +=
 
