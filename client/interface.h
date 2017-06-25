@@ -13,6 +13,7 @@
 #include "user.h"
 #include <QFrame>
 #include <QVBoxLayout>
+#include <windows.h>
 
 class Interface:  public QGraphicsView
 {
@@ -30,6 +31,7 @@ public:
     void getUser();
     void updateCalendar();
     void fillProfile();
+    void blink();
 private:
     QGraphicsScene * scene;
     QLineEdit * editLogin;
@@ -47,7 +49,7 @@ private:
 
     QString token = "";
     QString str_getText = "";
-    bool can_update = true;
+    QEventLoop loop;
 
     std::vector<MyUser> mas;
     QList< QLabel*> mas_label;

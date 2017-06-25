@@ -68,8 +68,9 @@ Interface::Interface(QWidget *parent)
 
     connect(list,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(itemDoubleClicked(QListWidgetItem*)));
     connect(list,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(itemClicked(QListWidgetItem*)));
+    connect(list,SIGNAL(currentRowChanged(int)),this,SLOT(itemClicked(QListWidgetItem*)));
 
-
+    //kek
 
 
     label = new QLabel;
@@ -152,8 +153,6 @@ void Interface::auth()
 
 void Interface::getRecords(bool from, QDate date)
 {
-    if (can_update)
-    {
         mas.clear();
         postData.clear();
 
@@ -169,9 +168,9 @@ void Interface::getRecords(bool from, QDate date)
         net = new QNetworkAccessManager();
 
         QObject::connect(net,SIGNAL(finished(QNetworkReply*)),this,SLOT(ongetRecordsResult(QNetworkReply*)));
+        QObject::connect(net, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
 
         net->post(request, postData);
-    }
 }
 
 
@@ -191,9 +190,9 @@ void Interface::fill_list()
     backButton->show();
 
     for (unsigned int i = 0; i < mas.size(); i++)
-        list->addItem(mas[i].time + "    " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name);
+        list->addItem(mas[i].time + "   " + mas[i].second_name + " " + mas[i].first_name + " " + mas[i].middle_name);
 
-    updateCalendar();
+    //updateCalendar();
 }
 
 void Interface::draw_calendar()
@@ -205,10 +204,7 @@ void Interface::draw_calendar()
 
     connect(calendar,SIGNAL(activated(QDate)),this,SLOT(calendarSelection()));
 
-    QDate date;
-    date.setDate(1900,01,01);
-    getRecords(true, date);
-
+    updateCalendar();
 }
 
 void Interface::addHistory()
@@ -265,6 +261,23 @@ void Interface::getUser()
 
 void Interface::updateCalendar()
 {
+
+    QDate date;
+    date.setDate(1900,01,01);
+    getRecords(true, date);
+    loop.exec();
+
+    static int kek = mas.size();
+
+    qDebug() << kek;
+    qDebug() << mas.size();
+
+    if (kek != mas.size())
+    {
+        blink();
+        kek = mas.size();
+    }
+
     calendar->setDateTextFormat(QDate() , QTextCharFormat());
 
     QTextCharFormat charformat;
@@ -288,6 +301,19 @@ void Interface::fillProfile()
     mas_label[6]->setText(SelectedUser.date.toString("yyyy-MM-dd"));
 }
 
+void Interface::blink()
+{
+    FLASHWINFO info;
+
+    info.cbSize = sizeof(info);
+    info.hwnd = (HWND)QWidget::winId();
+    info.dwFlags = FLASHW_TRAY;
+    info.dwTimeout = 0;
+    info.uCount = 3;
+
+    FlashWindowEx(&info);
+}
+
 void Interface::itemDoubleClicked(QListWidgetItem *item)
 {
     str_getText = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
@@ -308,33 +334,32 @@ void Interface::calendarSelection()
     QDate date;
     date = calendar->selectedDate();
 
+    timer->stop();
     calendar->hide();
     frame->show();
 
     list->clear();
 
     getRecords(false, date);
-    can_update = false;
 }
 
 void Interface::onbackButtonClick()
 {
     hideListfucn();
-    can_update = true;
 
     for (unsigned int i = 0; i<7; i++)
          mas_label[i]->hide();
 
     timer->setInterval(8000);
+    timer->start();
+
     onTimerTimeout();
     calendar->show();
 }
 
 void Interface::onTimerTimeout()
 {
-    QDate date;
-    date.setDate(1900,01,01);
-    getRecords(true, date);
+    updateCalendar();
 }
 
 void Interface::onAuthResult(QNetworkReply *reply)
@@ -388,7 +413,7 @@ void Interface::ongetRecordsResult(QNetworkReply *reply)
                    mas[i].second_name = subtree.value("second_name").toString();
                    mas[i].first_name = subtree.value("first_name").toString();
                    mas[i].middle_name = subtree.value("middle_name").toString();
-                   mas[i].time = subtree.value("date").toString().mid(11);
+                   mas[i].time = subtree.value("date").toString().mid(11,5);
                    mas[i].date = QDate::fromString(subtree.value("date").toString().left(10), "yyyy-MM-dd");
                    //qDebug() << mas[i].date;
                }
