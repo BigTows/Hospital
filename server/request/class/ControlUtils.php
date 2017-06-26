@@ -23,7 +23,7 @@ class ControlUtils
             $sqlQuery = "SELECT * FROM " . Constant::RECORD_VIEW . " WHERE id_doctor=:id AND ";
             global $DBConnect;
             if ($date == null) {
-                $sqlQuery .= "date(date)>=date(NOW())";
+                $sqlQuery .= "date(date)>=date(NOW()) ORDER BY date";
                 $stmt = $DBConnect->sendQuery($sqlQuery, [
                     "id" => $doctorID
                 ]);
@@ -31,7 +31,7 @@ class ControlUtils
 
                 $sqlQuery .= "date(date)";
                 if ($period) $sqlQuery .= ">";
-                $sqlQuery .= "=date(:date)";
+                $sqlQuery .= "=date(:date) ORDER BY date";
                 $stmt = $DBConnect->sendQuery($sqlQuery, [
                     "id" => $doctorID,
                     "date" => $date
