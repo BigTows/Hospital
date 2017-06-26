@@ -3,8 +3,6 @@
 
 historyWindow::historyWindow(QWidget *parent, std::vector<QString> massive)
 {
-    scene = new QGraphicsScene;
-    scene->setSceneRect(0,0,400,600);
     QVBoxLayout layout;
     setLayout(&layout);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -14,7 +12,7 @@ historyWindow::historyWindow(QWidget *parent, std::vector<QString> massive)
     list->clear();
     list->setStyleSheet("background-color: lightblue;"
                         "font: 17px;");
-    list->resize(scene->width(),scene->height());
+    list->resize(this->width(),this->height());
 
     for (unsigned int i = 0; i < massive.size(); i++)
     {
