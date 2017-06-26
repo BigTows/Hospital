@@ -10,7 +10,7 @@ require_once "../class/AuthUtils.php";
 require_once "../class/ControlUtils.php";
 $token = $_POST['token'] ?? null;
 $idUser = $_POST['id_user'] ?? null;
-$count = $_POST['count'] ?? 5;
+$count = $_POST['count'] ?? 9999999;
 $idDoctor = AuthUtils::isAuth($token,2);
 if ($idDoctor!=-1) {
     $response = new Response("Success","Send data",ControlUtils::getHistory($idUser,$count),0);
