@@ -12,7 +12,7 @@ historyWindow::historyWindow(QWidget *parent, std::vector<QString> massive)
     list->clear();
     list->setStyleSheet("background-color: lightblue;"
                         "font: 17px;");
-    list->resize(this->width(),this->height());
+    list->resize(400,600);
 
     for (unsigned int i = 0; i < massive.size(); i++)
     {
