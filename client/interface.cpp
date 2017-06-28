@@ -268,10 +268,7 @@ void Interface::getUser()
 
 void Interface::updateCalendar()
 {
-
-    QDate date;
-    date.setDate(1900,01,01);
-    getRecords(true, date);
+    getRecords(true, QDate::currentDate());
     loop.exec();
 
     static int kek = mas.size();
@@ -342,6 +339,7 @@ void Interface::getHistory()
 
 void Interface::itemDoubleClicked(QListWidgetItem *item)
 {
+    //добавить диалоговый класс
     str_getText = QInputDialog::getText( 0, "Направление", "Текст:", QLineEdit::Normal, "");
     if (str_getText != "")
     {
@@ -357,6 +355,7 @@ void Interface::itemClicked(QListWidgetItem *item)
 
 void Interface::calendarSelection()
 {
+    // убрать переменную, передавать сразу selectedDate()
     QDate date;
     date = calendar->selectedDate();
 
@@ -396,9 +395,8 @@ void Interface::onhistoryButtonClick()
     loop.exec();
     historyWindow * secwin = new historyWindow(0,massive);
     secwin->setFixedSize(400,600);
-    //secwin->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //secwin->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     secwin->exec();
+    delete secwin;
 }
 
 void Interface::test()
@@ -515,8 +513,13 @@ void Interface::ongetHistoryResult(QNetworkReply *reply)
             for(int i = 0; i < ja.count(); i++)
                {
                    QJsonObject subtree = ja.at(i).toObject();
+                   qDebug() << root;
 
-                   massive.insert(massive.begin(), subtree.value("text").toString());
+                   QString * tmp = new QString;
+                   *tmp = subtree.value("date").toString().mid(0,10) + ": " + subtree.value("text").toString();
+
+                   massive.insert(massive.begin(), *tmp);
+                   delete tmp;
                }
      }
 
